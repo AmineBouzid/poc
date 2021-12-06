@@ -1,31 +1,49 @@
 package tse.poc.timemgr.tse.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer id_user;
     private String nom;
     private String prenom;
     private String role;
 
+    @ManyToMany(mappedBy="users", fetch=FetchType.EAGER)
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Project> projects;
+
+    public User() {
+
+    }
+
 
     public Integer getId() {
-        return id;
+        return id_user;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.id_user = id;
     }
 
     public String getNom() {
         return nom;
+    }
+
+    public User(String nom, String prenom, String role) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.role = role;
     }
 
     public void setNom(String nom) {
