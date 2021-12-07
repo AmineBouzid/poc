@@ -12,7 +12,7 @@ public class Time {
     private Integer id_time;
 
     private Date date_saisie;
-    private java.sql.Time nb_hours;
+    private Long nb_hours;
 
     @ManyToOne
     private User user;

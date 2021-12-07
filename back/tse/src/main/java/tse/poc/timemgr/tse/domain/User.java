@@ -17,11 +17,8 @@ public class User {
     private String prenom;
     private String role;
 
-    @ManyToMany(mappedBy="users", fetch=FetchType.EAGER)
-    @JsonIgnore
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<Project> projects;
+    @ManyToOne
+    private User manager;
 
     public User() {
 

@@ -14,8 +14,8 @@ public class Project {
 
     private String project_name;
 
-    @ManyToMany(fetch= FetchType.EAGER)
-    private Set<User> users;
+    @ManyToOne
+    private User manager;
 
 
 
