@@ -1,10 +1,10 @@
 package tse.poc.timemgr.tse.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,8 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tse.poc.timemgr.tse.dao.RoleRepository;
@@ -27,6 +25,7 @@ import tse.poc.timemgr.tse.dao.UserRepository;
 import tse.poc.timemgr.tse.domain.ERole;
 import tse.poc.timemgr.tse.domain.Role;
 import tse.poc.timemgr.tse.domain.User;
+import tse.poc.timemgr.tse.payload.request.DeleteRequest;
 import tse.poc.timemgr.tse.payload.request.LoginRequest;
 import tse.poc.timemgr.tse.payload.request.SignupRequest;
 import tse.poc.timemgr.tse.payload.response.JwtResponse;
@@ -74,6 +73,19 @@ public class AuthController {
                 userDetails.getPrenom(),
                 userDetails.getEmail(),
                 roles));
+    }
+
+    @DeleteMapping(path ="/delete")
+    public ResponseEntity<?> deleteUser(@Valid @RequestBody DeleteRequest deleteRequest){
+        if (!userRepository.existsByUsername(deleteRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: User doesnt exist!"));
+        }else {
+            Optional<User> user_to_delete = userRepository.findByUsername(deleteRequest.getUsername());
+            user_to_delete.ifPresent(user -> {userRepository.deleteById(user.getId());});
+            return ResponseEntity.ok(new MessageResponse("User deleted successfully!"));}
+
     }
 
     @PostMapping("/signup")
