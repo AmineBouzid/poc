@@ -7,7 +7,6 @@ import java.util.Set;
 @Entity
 public class Project {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id_project;
@@ -17,8 +16,4 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "manager")
     private User manager;
-
-
-
-
 }

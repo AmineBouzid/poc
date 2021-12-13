@@ -39,5 +39,4 @@ export class UserService {
   getAllManagers(): Observable<any> {
     return this.http.get(API_URL_USERS + '/managers', { responseType: 'json' });
   }
-
 }
