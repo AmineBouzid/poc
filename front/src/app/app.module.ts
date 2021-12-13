@@ -25,6 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { authInterceptorProviders } from '../_helpers/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { HomeComponent } from './home/home.component';
     HomeComponent
   ],
   imports: [
+    MatSelectModule,
     MatSnackBarModule,
     ReactiveFormsModule,
     BrowserModule,

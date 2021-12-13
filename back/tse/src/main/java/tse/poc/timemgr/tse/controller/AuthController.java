@@ -96,6 +96,7 @@ public class AuthController {
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
+
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
@@ -136,10 +137,27 @@ public class AuthController {
                 }
             });
         }
+        String manager_response = "";
+        if (userRepository.existsByUsername(signUpRequest.getManager())) {
+            Optional<User> manager_object = userRepository.findByUsername(signUpRequest.getManager());
+            if(manager_object.isPresent()){
+                user.setManager(manager_object.get());
+            }else{
+                /*return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: Manager wasnt added"));*/
+                manager_response = "Warning : Manager wasn't added";
+            }
+        } else{
+           /* return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Manager doesn't exist!"));*/
+            manager_response = "Warning : Manager wasn't added";
+        }
 
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("User registered successfully! - "+manager_response));
     }
 }
