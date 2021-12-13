@@ -23,6 +23,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="manager_id", nullable = false, unique=true)
+    private Long manager_id = id;
+
     @NotBlank
     @Size(max = 25)
     private String username;

@@ -18,4 +18,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional(readOnly = true)
     public Collection<Project> findAllProject(){ return this.projectRepository.findAll(); }
+
+    @Override
+    @Transactional
+    public void addProject(Project project) {
+        this.projectRepository.save(project);
+    }
 }

@@ -7,4 +7,6 @@ import java.util.Collection;
 public interface ProjectService {
 
     Collection<Project> findAllProject();
+
+    void addProject(Project project);
 }
