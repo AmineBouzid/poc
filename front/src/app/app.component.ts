@@ -31,7 +31,7 @@ export class AppComponent {
       this.roles = user.roles;
 
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showManagerBoard = this.roles.includes('ROLE_MODERATOR');
+      this.showManagerBoard = this.roles.includes('ROLE_MANAGER');
 
       this.username = user.username;
     }

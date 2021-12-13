@@ -13,7 +13,7 @@ export class ManagerAppComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
-    this.userService.getModeratorBoard().subscribe(
+    this.userService.getManagerBoard().subscribe(
       data => {
         this.content = data;
       },
