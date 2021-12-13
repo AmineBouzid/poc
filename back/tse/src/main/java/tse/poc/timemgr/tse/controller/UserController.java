@@ -9,6 +9,7 @@ import tse.poc.timemgr.tse.service.UserService;
 import java.util.Collection;
 
 @RestController
+@RequestMapping("/no")
 public class UserController {
 
     @Autowired
