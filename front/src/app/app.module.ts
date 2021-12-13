@@ -27,7 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -42,6 +42,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     HomeComponent
   ],
   imports: [
+    MatCardModule,
     MatCheckboxModule,
     MatSelectModule,
     MatSnackBarModule,

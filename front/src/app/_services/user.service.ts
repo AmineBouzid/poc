@@ -28,6 +28,10 @@ export class UserService {
     return this.http.get(API_URL_ACCESS + 'admin', { responseType: 'text' });
   }
 
+  getRegisterBoard(): Observable<any> {
+    return this.http.get(API_URL_ACCESS + 'register', { responseType: 'text' });
+  }
+
   getAllUsers(): Observable<any> {
     return this.http.get(API_URL_USERS + '/all', { responseType: 'json' });
   }

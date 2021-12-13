@@ -38,7 +38,8 @@ export class RegisterComponent implements OnInit {
   role: string[] = [];
   checkedManager = false;
   checkedAdmin = false;
-
+  authorized = false;
+  content?: string;
 
   constructor(private authService: AuthService, private userService: UserService) { }
 
@@ -48,7 +49,20 @@ export class RegisterComponent implements OnInit {
         this.managers = data;
       },
     )
+    this.userService.getRegisterBoard().subscribe(
+      data => {
+        this.content = data;
+        this.authorized = true;
+      },
+      err => {
+        this.content = JSON.parse(err.error).message;
+        this.authorized = false;
+      }
+    );
+
   }
+
+
 
   onSubmit(): void {
 

@@ -1,5 +1,6 @@
 package tse.poc.timemgr.tse.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -75,6 +76,7 @@ public class AuthController {
                 roles));
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @DeleteMapping(path ="/delete")
     public ResponseEntity<?> deleteUser(@Valid @RequestBody DeleteRequest deleteRequest){
         if (!userRepository.existsByUsername(deleteRequest.getUsername())) {
@@ -89,6 +91,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
