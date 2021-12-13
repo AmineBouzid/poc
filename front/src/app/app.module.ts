@@ -26,6 +26,7 @@ import { authInterceptorProviders } from '../_helpers/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { MatSelectModule } from '@angular/material/select';
     HomeComponent
   ],
   imports: [
+    MatCheckboxModule,
     MatSelectModule,
     MatSnackBarModule,
     ReactiveFormsModule,

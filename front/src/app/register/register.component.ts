@@ -1,3 +1,4 @@
+import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { UserService } from '../_services/user.service';
@@ -25,7 +26,8 @@ export class RegisterComponent implements OnInit {
     email: null,
     password: null,
     manager: null,
-    prenom: null
+    prenom: null,
+    roles: null
   };
   isSuccessful = false;
   isSignUpFailed = false;
@@ -33,6 +35,10 @@ export class RegisterComponent implements OnInit {
   managerNotAdded = false;
   managers: User[] = [];
   selectedManager: string = "";
+  role: string[] = [];
+  checkedManager = false;
+  checkedAdmin = false;
+
 
   constructor(private authService: AuthService, private userService: UserService) { }
 
@@ -45,13 +51,23 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
+
+    this.role.push("user");
+    if (this.checkedManager) {
+      this.role.push("manager");
+    }
+    if (this.checkedAdmin) {
+      this.role.push("admin");
+    }
+
+    console.log(this.role)
     const { nom, prenom, username, email, password, manager } = this.form;
 
     if (manager == null) {
       this.managerNotAdded = true;
     }
     console.log(manager);
-    this.authService.register(username, email, password, manager, nom, prenom).subscribe(
+    this.authService.register(username, email, password, manager, nom, prenom, this.role).subscribe(
       data => {
         console.log(data);
         this.isSuccessful = true;

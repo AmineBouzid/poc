@@ -64,7 +64,9 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <div>{{form.manager}}</div>
+            <mat-checkbox name="managerCheckBox" [(ngModel)]="checkedManager">Manager</mat-checkbox>
+            <mat-checkbox name="adminCheckBox" [(ngModel)]="checkedAdmin">Admin</mat-checkbox>
+
             <button mat-raised-button color="primary">Sign Up</button>
             <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
                 Signup failed!<br />{{ errorMessage }}
