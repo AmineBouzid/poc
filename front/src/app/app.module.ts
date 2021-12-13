@@ -26,8 +26,22 @@ import { authInterceptorProviders } from '../_helpers/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
-@NgModule({
+const Materials = [
+  MatListModule,
+  MatToolbarModule,
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatDatepickerModule,
+  MatNativeDateModule
+];
+
+@NgModule({  
   declarations: [
     AppComponent,
     TimeComponent,
@@ -46,17 +60,9 @@ import { HomeComponent } from './home/home.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
     FormsModule,
     HttpClientModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule
-
+    Materials
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

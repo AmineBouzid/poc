@@ -45,8 +45,7 @@ public class User {
     private String nom;
     private String prenom;
 
-    @ManyToOne
-    private User manager;
+    private String manager;
 
     public User() {
 
@@ -116,11 +115,11 @@ public class User {
         this.prenom = prenom;
     }
 
-    public User getManager() {
+    public String getManager() {
         return manager;
     }
 
-    public void setManager(User manager) {
+    public void setManager(String manager) {
         this.manager = manager;
     }
 
