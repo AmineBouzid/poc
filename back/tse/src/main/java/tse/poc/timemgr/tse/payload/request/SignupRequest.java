@@ -17,6 +17,25 @@ public class SignupRequest {
     @NotBlank
     private String nom;
 
+    @NotBlank
+    private String prenom;
+
+    private Set<String> role;
+
+    @NotBlank
+    @Size(min = 6, max = 40)
+    private String password;
+
+    private String manager;
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
     public String getNom() {
         return nom;
     }
@@ -33,14 +52,7 @@ public class SignupRequest {
         this.prenom = prenom;
     }
 
-    @NotBlank
-    private String prenom;
 
-    private Set<String> role;
-
-    @NotBlank
-    @Size(min = 6, max = 40)
-    private String password;
 
     public String getUsername() {
         return username;

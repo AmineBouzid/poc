@@ -15,12 +15,6 @@ public class AccessController {
         return "Public Content.";
     }
 
-    @GetMapping("/user")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
-    public String userAccess() {
-        return "User Content.";
-    }
-
     @GetMapping("/manager")
     @PreAuthorize("hasRole('MANAGER')")
     public String managerAccess() {
@@ -31,5 +25,17 @@ public class AccessController {
     @PreAuthorize("hasRole('ADMIN')")
     public String adminAccess() {
         return "Admin Board.";
+    }
+
+    @GetMapping("/user")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    public String userAccess() {
+        return "User Content.";
+    }
+
+    @GetMapping("/register")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    public String registerAcess() {
+        return "Register Board";
     }
 }

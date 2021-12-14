@@ -32,3 +32,13 @@
   .alert-warning .alert-link {
     color: #66512c;
   }
+
+  mat-card {
+    max-width: 500px;
+    margin: 2em auto;
+    text-align: left;
+  }
+  
+  mat-form-field {
+    display: block;
+  }

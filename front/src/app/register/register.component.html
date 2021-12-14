@@ -1,46 +1,98 @@
-<div class="example-container">
-    <div class="form-container">
-        <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
-            <mat-form-field class="form-field" appearance="outline">
-                <mat-label for="username"> Username
-                </mat-label>
-                <input matInput type="text" class="form-control" name="username" [(ngModel)]="form.username" required
-                    minlength="3" maxlength="25" #username="ngModel">
-                <mat-error *ngIf="username.errors && f.submitted">
-                    <span *ngIf="username.errors?.['required']">Username is required</span>
-                    <span *ngIf="username.errors?.['minlength']">Username must be at least 3 characters</span>
-                    <span *ngIf="username.errors?.['maxlength']">
-                        Username must be at most 25 characters</span>
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field class="form-field" appearance="outline">
-                <mat-label for="email"> Email
-                </mat-label>
-                <input matInput type="email" class="form-control" name="email" [(ngModel)]="form.email" required email
-                    #email="ngModel">
-                <mat-error *ngIf="email.errors && f.submitted">
-                    <span *ngIf="email.errors?.['required']">Email is required</span>
-                    <span *ngIf="email.errors?.['email']">Email must be a valid email address</span>
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field class="form-field" appearance="outline">
-                <mat-label for="password"> Password
-                </mat-label>
-                <input matInput type="password" class="form-control" name="password" [(ngModel)]="form.password"
-                    required minlength="6" #password="ngModel">
-                <mat-error *ngIf="password.errors && f.submitted">
-                    <span *ngIf="password.errors?.['required']">Password is required</span>
-                    <span *ngIf="password.errors?.['minlength']">
-                        Password must be at least 6 characters</span>
-                </mat-error>
-            </mat-form-field>
-            <button mat-raised-button color="primary">Sign Up</button>
-            <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
-                Signup failed!<br />{{ errorMessage }}
+<mat-card *ngIf="!authorized">Error: Unauthorized </mat-card>
+<mat-card *ngIf="authorized">
+    <mat-card-content>
+        <div class="example-container">
+            <div class="form-container">
+
+                <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+                    <div style="display: flex; flex-direction: column; margin:50px; max-width:400px;">
+                        <h1>Add a new user</h1>
+                        <mat-form-field class="form-field" appearance="outline">
+                            <mat-label for="nom"> Last Name
+                            </mat-label>
+                            <input matInput type="text" class="form-control" name="nom" [(ngModel)]="form.nom" required
+                                minlength="2" #nom="ngModel">
+                            <mat-error *ngIf="nom.errors && f.submitted">
+                                <span *ngIf="nom.errors?.['required']">Last Name is required</span>
+                                <span *ngIf="nom.errors?.['minlength']">Last Name must be at least 2 characters</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="form-field" appearance="outline">
+                            <mat-label for="prenom"> First Name
+                            </mat-label>
+                            <input matInput type="text" class="form-control" [(ngModel)]="form.prenom" name="prenom"
+                                required minlength="2" #prenom="ngModel">
+                            <mat-error *ngIf="prenom.errors && f.submitted">
+                                <span *ngIf="prenom.errors?.['required']">First Name is required</span>
+                                <span *ngIf="prenom.errors?.['minlength']">First Name must be at least 2
+                                    characters</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="form-field" appearance="outline">
+                            <mat-label for="username"> Username
+                            </mat-label>
+                            <input matInput type="text" class="form-control" name="username" [(ngModel)]="form.username"
+                                required minlength="3" maxlength="25" #username="ngModel">
+                            <mat-error *ngIf="username.errors && f.submitted">
+                                <span *ngIf="username.errors?.['required']">Username is required</span>
+                                <span *ngIf="username.errors?.['minlength']">Username must be at least 3
+                                    characters</span>
+                                <span *ngIf="username.errors?.['maxlength']">
+                                    Username must be at most 25 characters</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="form-field" appearance="outline">
+                            <mat-label for="email"> Email
+                            </mat-label>
+                            <input matInput type="email" class="form-control" name="email" [(ngModel)]="form.email"
+                                required email #email="ngModel">
+                            <mat-error *ngIf="email.errors && f.submitted">
+                                <span *ngIf="email.errors?.['required']">Email is required</span>
+                                <span *ngIf="email.errors?.['email']">Email must be a valid email address</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="form-field" appearance="outline">
+                            <mat-label for="password"> Password
+                            </mat-label>
+                            <input matInput type="password" class="form-control" name="password"
+                                [(ngModel)]="form.password" required minlength="6" #password="ngModel">
+                            <mat-error *ngIf="password.errors && f.submitted">
+                                <span *ngIf="password.errors?.['required']">Password is required</span>
+                                <span *ngIf="password.errors?.['minlength']">
+                                    Password must be at least 6 characters</span>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Managers</mat-label>
+                            <mat-select [(ngModel)]="form.manager" #manager="ngModel" name="manager">
+                                <mat-option selected [value]="null">No Manager</mat-option>
+                                <mat-option *ngFor="let item of managers" [value]="item.username">
+                                    {{item.username}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-label>Roles : </mat-label>
+                        <mat-checkbox name="managerCheckBox" [(ngModel)]="checkedManager" [checked]="checkedAdmin"
+                            [disabled]="checkedAdmin">
+                            Manager
+                        </mat-checkbox>
+                        <mat-checkbox name="adminCheckBox" [(ngModel)]="checkedAdmin">Admin</mat-checkbox>
+                        <br>
+                        <button mat-raised-button color="primary">Sign Up</button>
+                        <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+                            Signup failed!<br />{{ errorMessage }}
+                        </div>
+                    </div>
+                </form>
+                <div class="alert alert-success" *ngIf="isSuccessful">
+                    Your registration is successful!
+                    <div class="alert alert-warning" *ngIf="managerNotAdded">
+                        No manager was assigned to this user
+                    </div>
+                </div>
+
             </div>
-        </form>
-        <div class="alert alert-success" *ngIf="isSuccessful">
-            Your registration is successful!
         </div>
-    </div>
-</div>
+    </mat-card-content>
+</mat-card>

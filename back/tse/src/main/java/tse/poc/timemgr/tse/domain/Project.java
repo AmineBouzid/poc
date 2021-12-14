@@ -15,6 +15,7 @@ public class Project {
     private String project_name;
 
     @ManyToOne
+    @JoinColumn(name = "manager")
     private User manager;
 
 

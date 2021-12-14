@@ -1,5 +1,6 @@
 package tse.poc.timemgr.tse.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -75,6 +76,7 @@ public class AuthController {
                 roles));
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @DeleteMapping(path ="/delete")
     public ResponseEntity<?> deleteUser(@Valid @RequestBody DeleteRequest deleteRequest){
         if (!userRepository.existsByUsername(deleteRequest.getUsername())) {
@@ -89,12 +91,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
+
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
@@ -137,9 +141,28 @@ public class AuthController {
             });
         }
 
+
+        String manager_response = "";
+        if (userRepository.existsByUsername(signUpRequest.getManager())) {
+            Optional<User> manager_object = userRepository.findByUsername(signUpRequest.getManager());
+            if(manager_object.isPresent()){
+                user.setManager(manager_object.get());
+            }else{
+                /*return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: Manager wasnt added"));*/
+                manager_response = "Warning : Manager wasn't added";
+            }
+        } else{
+           /* return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Manager doesn't exist!"));*/
+            manager_response = "Warning : Manager wasn't added";
+        }
+
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("User registered successfully! - "+manager_response));
     }
 }
