@@ -73,7 +73,10 @@
                             </mat-select>
                         </mat-form-field>
                         <mat-label>Roles : </mat-label>
-                        <mat-checkbox name="managerCheckBox" [(ngModel)]="checkedManager">Manager</mat-checkbox>
+                        <mat-checkbox name="managerCheckBox" [(ngModel)]="checkedManager" [checked]="checkedAdmin"
+                            [disabled]="checkedAdmin">
+                            Manager
+                        </mat-checkbox>
                         <mat-checkbox name="adminCheckBox" [(ngModel)]="checkedAdmin">Admin</mat-checkbox>
                         <br>
                         <button mat-raised-button color="primary">Sign Up</button>

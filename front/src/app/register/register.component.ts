@@ -72,6 +72,7 @@ export class RegisterComponent implements OnInit {
     }
     if (this.checkedAdmin) {
       this.role.push("admin");
+      this.role.push("manager");
     }
 
     console.log(this.role)

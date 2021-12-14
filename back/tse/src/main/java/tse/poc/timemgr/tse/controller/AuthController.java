@@ -140,6 +140,8 @@ public class AuthController {
                 }
             });
         }
+
+
         String manager_response = "";
         if (userRepository.existsByUsername(signUpRequest.getManager())) {
             Optional<User> manager_object = userRepository.findByUsername(signUpRequest.getManager());

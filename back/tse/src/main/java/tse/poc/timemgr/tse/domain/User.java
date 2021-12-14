@@ -45,7 +45,8 @@ public class User {
     private String nom;
     private String prenom;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager")
     private User manager;
 
     public User() {
