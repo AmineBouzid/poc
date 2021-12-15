@@ -38,4 +38,10 @@ public class AccessController {
     public String registerAcess() {
         return "Register Board";
     }
+
+    @GetMapping("/project")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    public String projectAcess() {
+        return "Project Board";
+    }
 }
