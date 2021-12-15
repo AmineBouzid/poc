@@ -62,8 +62,7 @@
                                     Password must be at least 6 characters</span>
                             </mat-error>
                         </mat-form-field>
-
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="fill" *ngIf="usedByAdmin">
                             <mat-label>Managers</mat-label>
                             <mat-select [(ngModel)]="form.manager" #manager="ngModel" name="manager">
                                 <mat-option selected [value]="null">No Manager</mat-option>
@@ -72,12 +71,13 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-label>Roles : </mat-label>
-                        <mat-checkbox name="managerCheckBox" [(ngModel)]="checkedManager" [checked]="checkedAdmin"
-                            [disabled]="checkedAdmin">
+                        <mat-label *ngIf="usedByAdmin">Roles : </mat-label>
+                        <mat-checkbox *ngIf="usedByAdmin" name="managerCheckBox" [(ngModel)]="checkedManager"
+                            [checked]="checkedAdmin" [disabled]="checkedAdmin">
                             Manager
                         </mat-checkbox>
-                        <mat-checkbox name="adminCheckBox" [(ngModel)]="checkedAdmin">Admin</mat-checkbox>
+                        <mat-checkbox *ngIf="usedByAdmin" name="adminCheckBox" [(ngModel)]="checkedAdmin">Admin
+                        </mat-checkbox>
                         <br>
                         <button mat-raised-button color="primary">Sign Up</button>
                         <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">

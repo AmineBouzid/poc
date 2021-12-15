@@ -2,7 +2,7 @@ import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { UserService } from '../_services/user.service';
-
+import { TokenStorageService } from '../_services/token-storage.service';
 interface User {
   id: Number;
   username: String;
@@ -39,11 +39,22 @@ export class RegisterComponent implements OnInit {
   checkedManager = false;
   checkedAdmin = false;
   authorized = false;
+  usedByAdmin = false;
   content?: string;
+  currentUser: any;
 
-  constructor(private authService: AuthService, private userService: UserService) { }
+  constructor(private token: TokenStorageService, private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
+    this.currentUser = this.token.getUser();
+    for (let item of this.currentUser.roles) {
+      if (item == "ROLE_ADMIN") {
+        this.usedByAdmin = true;
+      }
+
+
+    }
+
     this.userService.getAllManagers().subscribe(
       data => {
         this.managers = data;
@@ -81,8 +92,16 @@ export class RegisterComponent implements OnInit {
     if (manager == null) {
       this.managerNotAdded = true;
     }
-    console.log(manager);
-    this.authService.register(username, email, password, manager, nom, prenom, this.role).subscribe(
+
+    for (let item of this.currentUser.roles) {
+      if (item == "ROLE_ADMIN") {
+        this.usedByAdmin = true;
+      } else {
+        this.form.manager = this.currentUser.username;
+      }
+    }
+
+    this.authService.register(username, email, password, this.form.manager, nom, prenom, this.role).subscribe(
       data => {
         console.log(data);
         this.isSuccessful = true;
