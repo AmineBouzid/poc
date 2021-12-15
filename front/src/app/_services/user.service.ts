@@ -32,6 +32,12 @@ export class UserService {
     return this.http.get(API_URL_ACCESS + 'register', { responseType: 'text' });
   }
 
+  getProjectBoard(): Observable<any> {
+    return this.http.get(API_URL_USERS + '/project', { responseType: 'json' });
+  }
+
+
+
   getAllUsers(): Observable<any> {
     return this.http.get(API_URL_USERS + '/all', { responseType: 'json' });
   }
@@ -39,4 +45,6 @@ export class UserService {
   getAllManagers(): Observable<any> {
     return this.http.get(API_URL_USERS + '/managers', { responseType: 'json' });
   }
+
+
 }
