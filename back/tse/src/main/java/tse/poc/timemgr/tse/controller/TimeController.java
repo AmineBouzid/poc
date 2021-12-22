@@ -2,6 +2,7 @@ package tse.poc.timemgr.tse.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tse.poc.timemgr.tse.dao.ProjectRepository;
 import tse.poc.timemgr.tse.dao.TimeRepository;
@@ -34,14 +35,14 @@ public class TimeController {
     @Autowired
     UserRepository userRepository;
 
-    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
     @GetMapping(path = "/all", produces ="application/json")
     public List<Time> findAllTimes() {
 
         return timeRepository.findAll();
     }
 
-    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
     @DeleteMapping(path ="/time/{id}")
     public ResponseEntity<?> deleteTime(@PathVariable Long id){
 
@@ -56,7 +57,7 @@ public class TimeController {
         }
     }
 
-    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
     @PostMapping(path ="/add")
     public ResponseEntity<?> addTime(@Valid @RequestBody TimeRequest timeRequest) throws ParseException {
         Optional<User> userToAttach = userRepository.findById(timeRequest.getUser_id());

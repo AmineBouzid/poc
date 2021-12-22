@@ -34,7 +34,7 @@ public class AccessController {
     }
 
     @GetMapping("/register")
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')") 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public String registerAccess() {
         return "Register Board";
     }

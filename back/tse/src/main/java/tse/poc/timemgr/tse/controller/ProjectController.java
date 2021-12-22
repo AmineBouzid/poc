@@ -30,7 +30,7 @@ public class ProjectController {
     @Autowired
     UserRepository userRepository;
 
-    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping(path = "/all", produces ="application/json")
     public Collection<Project> findAllProject() {
         return projectService.findAllProject();
