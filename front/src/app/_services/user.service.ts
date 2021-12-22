@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { NumberInput } from '@angular/cdk/coercion';
 
 const API_URL_ACCESS = 'http://localhost:8080/access/';
-const API_URL_USERS = 'http://localhost:8080/users';
+const API_URL_USERS = 'http://localhost:8080/users/';
+const API_URL_PROJECTS = 'http://localhost:8080/project/';
+const API_URL_TIME = 'http://localhost:8080/time/';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -33,18 +40,36 @@ export class UserService {
   }
 
   getProjectBoard(): Observable<any> {
-    return this.http.get(API_URL_USERS + '/project', { responseType: 'json' });
+    return this.http.get(API_URL_ACCESS + 'project', { responseType: 'text' });
   }
 
 
 
   getAllUsers(): Observable<any> {
-    return this.http.get(API_URL_USERS + '/all', { responseType: 'json' });
+    return this.http.get(API_URL_USERS + 'all', { responseType: 'json' });
   }
 
   getAllManagers(): Observable<any> {
-    return this.http.get(API_URL_USERS + '/managers', { responseType: 'json' });
+    return this.http.get(API_URL_USERS + 'managers', { responseType: 'json' });
+  }
+
+  getAllProjects(): Observable<any> {
+    return this.http.get(API_URL_PROJECTS + 'all', { responseType: 'json' });
   }
 
 
+
+
+  addProject(project_name: string, manager_id: number): Observable<any> {
+    return this.http.post(API_URL_PROJECTS + 'add', {
+      project_name,
+      manager_id,
+    }, httpOptions);
+  }
+
+  addTime(date_saisie: string, nb_hours: string, user_id: number, project_id: number): Observable<any> {
+    return this.http.post(API_URL_TIME + 'add', {
+      date_saisie, nb_hours, user_id, project_id,
+    }, httpOptions);
+  }
 }

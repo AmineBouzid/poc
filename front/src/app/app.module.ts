@@ -29,8 +29,29 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule, NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
 
+
+const INTL_DATE_INPUT_FORMAT = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  hourCycle: 'h23',
+  hour: '2-digit',
+  minute: '2-digit',
+};
+
+const MAT_DATE_FORMATS: NgxMatDateFormats = {
+  parse: {
+    dateInput: INTL_DATE_INPUT_FORMAT,
+  },
+  display: {
+    dateInput: INTL_DATE_INPUT_FORMAT,
+    monthYearLabel: { year: 'numeric', month: 'short' },
+    dateA11yLabel: { year: 'numeric', month: 'long', day: 'numeric' },
+    monthYearA11yLabel: { year: 'numeric', month: 'long' },
+  },
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,6 +65,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     HomeComponent
   ],
   imports: [
+    NgxMatNativeDateModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
     MatCardModule,
     MatCheckboxModule,
     MatSelectModule,
@@ -64,9 +88,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatInputModule,
     MatButtonModule,
     MatDatepickerModule,
-    MatNativeDateModule
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders,
+    { provide: NGX_MAT_DATE_FORMATS, useValue: MAT_DATE_FORMATS },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

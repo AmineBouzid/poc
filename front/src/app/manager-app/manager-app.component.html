@@ -1,5 +1,29 @@
-<div class="container">
-    <header class="jumbotron">
-        <p>{{ content }}</p>
-    </header>
-</div>
+<mat-card *ngIf="!authorized">Error: Unauthorized </mat-card>
+<mat-card *ngIf="authorized">
+    <div class="container">
+        <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+            <div style="display: flex; flex-direction: column; margin:50px; max-width:400px;">
+                <h1>Add a new project</h1>
+                <mat-form-field class="form-field" appearance="outline">
+                    <mat-label for="nom_projet"> Project Name
+                    </mat-label>
+                    <input matInput type="text" class="form-control" name="nom_projet" [(ngModel)]="form.nom_projet"
+                        required minlength="5" #nom_projet="ngModel">
+                    <mat-error *ngIf="nom_projet.errors && f.submitted">
+                        <span *ngIf="nom_projet.errors?.['required']">Project Name is required</span>
+                        <span *ngIf="nom_projet.errors?.['minlength']">Project name must be at least 5 characters</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <br>
+                <button mat-raised-button color="primary">Ajouter Projet</button>
+                <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+                    Project adding failed!<br />{{ errorMessage }}
+                </div>
+            </div>
+        </form>
+        <div class="alert alert-success" *ngIf="isSuccessful">
+            Project has been added !
+        </div>
+    </div>
+</mat-card>

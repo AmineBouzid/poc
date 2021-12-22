@@ -87,7 +87,7 @@
                 </form>
                 <div class="alert alert-success" *ngIf="isSuccessful">
                     Your registration is successful!
-                    <div class="alert alert-warning" *ngIf="managerNotAdded">
+                    <div class="alert alert-warning" *ngIf="managerNotAdded && usedByAdmin">
                         No manager was assigned to this user
                     </div>
                 </div>
