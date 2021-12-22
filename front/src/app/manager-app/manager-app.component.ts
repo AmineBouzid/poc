@@ -30,7 +30,7 @@ export class ManagerAppComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.token.getUser();
-    this.userService.getManagerBoard().subscribe(
+    this.userService.getProjectBoard().subscribe(
       data => {
         this.content = data;
         this.authorized = true;

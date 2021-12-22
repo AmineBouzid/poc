@@ -30,7 +30,7 @@ public class ProjectController {
     @Autowired
     UserRepository userRepository;
 
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping(path = "/all", produces ="application/json")
     public Collection<Project> findAllProject() {
         return projectService.findAllProject();
@@ -47,13 +47,13 @@ public class ProjectController {
                     .body(new MessageResponse("Error: Project doesnt exist!"));
         }else{
             projectRepository.deleteById(id);
-            return ResponseEntity.ok(new MessageResponse("Project added successfully!"));
+            return ResponseEntity.ok(new MessageResponse("Project deleted successfully!"));
         }
     }
 
 
 
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @PostMapping(path ="/add")
     public ResponseEntity<?> addProject(@Valid @RequestBody ProjectRequest projectRequest)
     {

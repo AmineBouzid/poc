@@ -34,14 +34,14 @@ public class AccessController {
     }
 
     @GetMapping("/register")
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
-    public String registerAcess() {
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')") 
+    public String registerAccess() {
         return "Register Board";
     }
 
     @GetMapping("/project")
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
-    public String projectAcess() {
-        return "Project Board";
+    public String projectAccess() {
+        return "Register Board";
     }
 }

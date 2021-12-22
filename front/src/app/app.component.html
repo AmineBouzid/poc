@@ -19,27 +19,27 @@
         <mat-nav-list routerLinkActive="active" *ngIf="isLoggedIn">
             <a mat-list-item *ngIf="isLoggedIn" routerLink="/profile" href="/profile">
                 <mat-icon>account_circle</mat-icon>
-                <span>{{ username }}</span>
+                <span>Profile : {{ username }}</span>
             </a>
             <a mat-list-item *ngIf="isLoggedIn" routerLink="/user" href="/user">
                 <mat-icon>calendar_today</mat-icon>
-                <span>User</span>
+                <span>Time Table</span>
             </a>
         </mat-nav-list>
         <mat-nav-list routerLinkActive="active" *ngIf="showManagerBoard">
             <a mat-list-item *ngIf="showManagerBoard" routerLink="/manager" href="/manager">
                 <mat-icon>assignment</mat-icon>
-                <span>Manager</span>
+                <span>Projects</span>
             </a>
             <a mat-list-item *ngIf="showManagerBoard" routerLink="/register" href="/register">
                 <mat-icon>supervised_user_circle</mat-icon>
-                <span>Sign Up</span>
+                <span>Users Management</span>
             </a>
         </mat-nav-list>
         <mat-nav-list routerLinkActive="active" *ngIf="showAdminBoard">
             <a mat-list-item *ngIf="showAdminBoard" routerLink="/admin" href="/admin">
                 <mat-icon>security</mat-icon>
-                <span>Manager</span>
+                <span>Admin Board</span>
             </a>
         </mat-nav-list>
     </mat-sidenav>
