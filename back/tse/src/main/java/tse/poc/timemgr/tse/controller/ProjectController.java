@@ -53,7 +53,7 @@ public class ProjectController {
 
 
 
-    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @PostMapping(path ="/add")
     public ResponseEntity<?> addProject(@Valid @RequestBody ProjectRequest projectRequest)
     {
