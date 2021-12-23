@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ import tse.poc.timemgr.tse.domain.User;
 import tse.poc.timemgr.tse.payload.request.DeleteRequest;
 import tse.poc.timemgr.tse.payload.request.LoginRequest;
 import tse.poc.timemgr.tse.payload.request.SignupRequest;
+import tse.poc.timemgr.tse.payload.request.UpdateRequest;
 import tse.poc.timemgr.tse.payload.response.JwtResponse;
 import tse.poc.timemgr.tse.payload.response.MessageResponse;
 import tse.poc.timemgr.tse.security.jwt.JwtUtils;
@@ -77,6 +79,74 @@ public class AuthController {
                 roles));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update")
+    public ResponseEntity<?>  updateUser(@Valid @RequestBody UpdateRequest updateRequest) {
+
+        Optional<User> userToUpdate = userRepository.findById(updateRequest.getId());
+        if (!userToUpdate.isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: User don't exist!"));
+        }else
+        {
+            AtomicReference<String> manager_response = new AtomicReference<>("");
+            userRepository.findById(updateRequest.getId())
+                    .map(User -> {
+                        User.setNom(updateRequest.getNom());
+                        User.setPrenom(updateRequest.getPrenom());
+                        User.setEmail(updateRequest.getEmail());
+
+                        Set<String> strRoles = updateRequest.getRole();
+                        Set<Role> roles = new HashSet<>();
+
+                        if (strRoles == null) {
+                            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(userRole);
+                        } else {
+                            strRoles.forEach(role -> {
+                                switch (role) {
+                                    case "admin":
+                                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                        roles.add(adminRole);
+
+                                        break;
+                                    case "manager":
+                                        Role managerRole = roleRepository.findByName(ERole.ROLE_MANAGER)
+                                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                        roles.add(managerRole);
+
+                                        break;
+                                    default:
+                                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                        roles.add(userRole);
+                                }
+                            });
+                        }
+                        User.setRoles(roles);
+
+                        if (userRepository.existsByUsername(updateRequest.getManager())) {
+                            Optional<User> manager_object = userRepository.findByUsername(updateRequest.getManager());
+                            if(manager_object.isPresent()){
+                                User.setManager(manager_object.get());
+                            }else{
+                                manager_response.set("Warning : Manager wasn't updated");
+                            }
+                        } else{
+                            manager_response.set("Warning : Manager wasn't updated");
+                        }
+                        User.setUsername(updateRequest.getUsername());
+                        User.setPassword(encoder.encode(updateRequest.getPassword()));
+                        return userRepository.save(User);
+
+                    });
+            return ResponseEntity.ok(new MessageResponse("User Updated successfully!"+manager_response));
+        }
+    }
+
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @DeleteMapping(path ="/delete")
     public ResponseEntity<?> deleteUser(@Valid @RequestBody DeleteRequest deleteRequest){
@@ -90,6 +160,8 @@ public class AuthController {
             return ResponseEntity.ok(new MessageResponse("User deleted successfully!"));}
 
     }
+
+
 
     @PostMapping("/signup")
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")

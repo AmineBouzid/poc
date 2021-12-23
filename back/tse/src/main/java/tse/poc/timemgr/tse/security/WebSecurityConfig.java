@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import tse.poc.timemgr.tse.security.jwt.AuthEntryPointJwt;
 import tse.poc.timemgr.tse.security.jwt.AuthTokenFilter;
 import tse.poc.timemgr.tse.security.services.UserDetailsServiceImpl;
@@ -61,10 +64,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/access/**").permitAll()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/project/**").permitAll()
-                .antMatchers("/no/**").permitAll()
                 .antMatchers("/time/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*")
+                        .allowedHeaders("*");
+            }
+        };
     }
 }
