@@ -34,4 +34,17 @@ export class AuthService {
       role
     }, httpOptions);
   }
+
+  updateUser(id: number, username: string, email: string, password: string, manager: string, nom: string, prenom: string, role: string[]): Observable<any> {
+    return this.http.put(AUTH_API + 'update', {
+      id,
+      username,
+      email,
+      password,
+      manager,
+      nom,
+      prenom,
+      role
+    }, httpOptions);
+  }
 }
