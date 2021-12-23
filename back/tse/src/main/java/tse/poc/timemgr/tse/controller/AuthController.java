@@ -79,6 +79,7 @@ public class AuthController {
                 roles));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<?>  updateUser(@Valid @RequestBody UpdateRequest updateRequest) {
 
