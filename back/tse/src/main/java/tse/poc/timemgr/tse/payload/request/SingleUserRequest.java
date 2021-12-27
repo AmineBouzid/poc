@@ -1,16 +1,17 @@
 package tse.poc.timemgr.tse.payload.request;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-public class DeleteRequest {
-    @NotBlank
-    private String username;
+public class SingleUserRequest {
+    @NotNull
+    private Long id;
 
-    public String getUsername() {
-        return username;
+    public Long getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

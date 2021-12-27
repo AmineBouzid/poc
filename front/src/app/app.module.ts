@@ -17,7 +17,7 @@ import { TimeComponent } from './time/time.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-
+import { MatTableModule } from '@angular/material/table';
 import { UserAppComponent } from './user-app/user-app.component';
 import { ManagerAppComponent } from './manager-app/manager-app.component';
 import { AdminAppComponent } from './admin-app/admin-app.component';
@@ -65,6 +65,7 @@ const MAT_DATE_FORMATS: NgxMatDateFormats = {
     HomeComponent
   ],
   imports: [
+    MatTableModule,
     NgxMatNativeDateModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,

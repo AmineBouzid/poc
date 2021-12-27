@@ -10,13 +10,16 @@ import tse.poc.timemgr.tse.dao.UserRepository;
 import tse.poc.timemgr.tse.domain.Project;
 import tse.poc.timemgr.tse.domain.Time;
 import tse.poc.timemgr.tse.domain.User;
+import tse.poc.timemgr.tse.payload.request.SingleUserRequest;
 import tse.poc.timemgr.tse.payload.request.TimeRequest;
+import tse.poc.timemgr.tse.payload.request.UpdateRequest;
 import tse.poc.timemgr.tse.payload.response.MessageResponse;
 
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +58,18 @@ public class TimeController {
             timeRepository.deleteById(id);
             return ResponseEntity.ok(new MessageResponse("Time deleted successfully!"));
         }
+    }
+
+
+    @GetMapping(path=   "/usertime/{id}", produces ="application/json")
+    public Optional<List<Time>>  getUserTimes(@PathVariable Long id) {
+        Optional<User> user = userRepository.findById(id);
+        Optional<List<Time>> listOptional = timeRepository.findByUser(user.get());
+
+        return listOptional;
+
+
+
     }
 
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
