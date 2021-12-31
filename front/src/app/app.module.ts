@@ -30,7 +30,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule, NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
-
+import { MatNativeDateModule } from '@angular/material/core';
 
 const INTL_DATE_INPUT_FORMAT = {
   year: 'numeric',
@@ -65,6 +65,7 @@ const MAT_DATE_FORMATS: NgxMatDateFormats = {
     HomeComponent
   ],
   imports: [
+    MatNativeDateModule,
     MatTableModule,
     NgxMatNativeDateModule,
     NgxMatDatetimePickerModule,

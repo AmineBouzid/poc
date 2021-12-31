@@ -1,11 +1,13 @@
 <mat-card *ngIf="!authorized">Error: Unauthorized </mat-card>
-<mat-card *ngIf="authorized">
+<div class="wrapper">
+<div class="div1">
+<mat-card style="min-width: 800px; display: flex; flex-direction: column;" *ngIf="authorized">
     <mat-card-content>
         <h1>Add a new time entry</h1>
         <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
             <mat-form-field>
                 <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date and a duration"
-                    [formControl]="dateControl" [disabled]="disabled">
+                [min]="minDate" [max]="maxDate" [formControl]="dateControl" [disabled]="disabled">
                 <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
                 <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
                     [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
@@ -29,11 +31,49 @@
         <div class="alert alert-success" *ngIf="isSuccessful">
             Adding time is successful!
         </div>
-    </mat-card-content>
-</mat-card>
-<mat-card style="min-width: 800px;">
-    <mat-card-content>
+        <br>
         <h1>Your Time entries</h1>
+        <form [formGroup]="form1" (submit)="applyDateFilter()">
+            <mat-label>Filter by date range</mat-label>
+            <mat-form-field>
+                <input 
+                matInput 
+                placeholder="From" 
+                [matDatepicker]="picker1"
+                formControlName="fromDate"
+                required
+                (click)="picker1.open()"
+                >
+                <mat-datepicker-toggle 
+                matSuffix [for]="picker1"
+                ></mat-datepicker-toggle>
+                <mat-datepicker 
+                #picker1></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <input 
+                matInput 
+                placeholder="To" 
+                [matDatepicker]="picker2"
+                formControlName="toDate"
+                required
+                (click)="picker2.open()"
+                >
+                <mat-datepicker-toggle 
+                matSuffix [for]="picker2"
+                ></mat-datepicker-toggle>
+                <mat-datepicker 
+                #picker2></mat-datepicker>
+            </mat-form-field>
+            <button style="margin:5px;"
+            class="button-form" 
+            mat-raised-button color="accent" 
+            (click)="applyDateFilter()"
+            [disabled]="form1.invalid">Submit</button>
+            <button style="margin:5px;" mat-raised-button color="accent" type="button" (click)="resetFilter()" [disabled]="form1.invalid">Clear</button>
+            <br>
+            </form>
+            <br>
         <table id="myTable" mat-table [dataSource]="times" class="mat-elevation-z8">
 
             <!-- Position Column -->
@@ -82,9 +122,12 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
         </table>
+        <br>
         <button mat-raised-button (click)="download()" color="primary">Export your times</button>
     </mat-card-content>
 </mat-card>
+</div>
+<div class = "div2">
 <mat-card style="min-width: 800px; display: flex; flex-direction: column;" *ngIf="authorized && usedByAdminOrManager">
     <mat-card-content>
         <h1>Load other user's entries</h1>
@@ -101,6 +144,46 @@
                 <button mat-raised-button color="primary">Load</button>
             </div>
         </form>
+        <form [formGroup]="form_others" (submit)="applyDateFilterOthers()">
+            <mat-label>Filter by date range</mat-label>
+            <mat-form-field>
+                <input 
+                matInput 
+                placeholder="From" 
+                [matDatepicker]="picker11"
+                formControlName="fromDate"
+                required
+                (click)="picker11.open()"
+                >
+                <mat-datepicker-toggle 
+                matSuffix [for]="picker11"
+                ></mat-datepicker-toggle>
+                <mat-datepicker 
+                #picker11></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <input 
+                matInput 
+                placeholder="To" 
+                [matDatepicker]="picker22"
+                formControlName="toDate"
+                required
+                (click)="picker22.open()"
+                >
+                <mat-datepicker-toggle 
+                matSuffix [for]="picker22"
+                ></mat-datepicker-toggle>
+                <mat-datepicker 
+                #picker22></mat-datepicker>
+            </mat-form-field>
+            <button 
+            class="button-form"  style="margin:5px;"
+            mat-raised-button color="accent" 
+            (click)="applyDateFilterOthers()"
+            [disabled]="form_others.invalid">Submit</button>
+            <button style="margin:5px;" mat-raised-button color="accent" type="button" (click)="resetFilterOthers()" [disabled]="form_others.invalid">Clear</button>
+            </form>
+            <br>
         <table id="otherTable" mat-table [dataSource]="times_other" class="mat-elevation-z8">
 
             <!-- Position Column -->
@@ -147,6 +230,9 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
         </table>
+        <br>
         <button mat-raised-button (click)="downloadOthers()" color="primary">Export the times</button>
     </mat-card-content>
 </mat-card>
+</div>
+</div>
