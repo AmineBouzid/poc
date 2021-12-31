@@ -58,6 +58,8 @@ export class AdminAppComponent implements OnInit {
   content?: string;
   currentUser: any;
 
+
+
   constructor(private snackBar: MatSnackBar, private token: TokenStorageService, private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
@@ -99,6 +101,8 @@ export class AdminAppComponent implements OnInit {
     this.userService.getUserById(this.form_user.username_id).subscribe(
       data => {
         this.form = data;
+        this.form.manager = this.form.manager['username'];
+        //console.log(this.form.manager['username'])
         this.form.password = "";
         for (let item of this.form.roles) {
           if (item.name == "ROLE_ADMIN") {
