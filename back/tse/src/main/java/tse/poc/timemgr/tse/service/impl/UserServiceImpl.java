@@ -3,6 +3,7 @@ package tse.poc.timemgr.tse.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tse.poc.timemgr.tse.dao.RoleRepository;
 import tse.poc.timemgr.tse.dao.UserRepository;
 import tse.poc.timemgr.tse.domain.ERole;
 import tse.poc.timemgr.tse.domain.Role;
@@ -10,13 +11,16 @@ import tse.poc.timemgr.tse.domain.User;
 import tse.poc.timemgr.tse.service.UserService;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -31,9 +35,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void addUser(User user) {
-        this.userRepository.save(user);
+    public Collection<User> findAllManagers() {
+        Optional<Role> role = roleRepository.findByName(ERole.ROLE_MANAGER);
+        return userRepository.findByRoles(role);
     }
 
     @Override

@@ -24,11 +24,6 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
     @GetMapping(path = "/all", produces ="application/json")
@@ -39,36 +34,15 @@ public class ProjectController {
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @DeleteMapping(path ="/project/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id){
-
-        Optional<Project> projectToDelete = this.projectRepository.findById(id);
-        if (!projectToDelete.isPresent()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Project doesnt exist!"));
-        }else{
-            projectRepository.deleteById(id);
-            return ResponseEntity.ok(new MessageResponse("Project deleted successfully!"));
-        }
+        ResponseEntity<?> responseEntity = projectService.deleteProject(id);
+        return responseEntity;
     }
-
 
 
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @PostMapping(path ="/add")
     public ResponseEntity<?> addProject(@Valid @RequestBody ProjectRequest projectRequest)
     {
-        Optional<User> manager_to_attach = userRepository.findById(projectRequest.getManager_id());
-
-        if (!manager_to_attach.isPresent()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Manager doesnt exist!"));
-        }else {
-            Project project = new Project();
-            project.setProject_name(projectRequest.getProject_name());
-            project.setManager(manager_to_attach.get());
-            projectRepository.save(project);
-            return ResponseEntity.ok(new MessageResponse("Project added successfully!"));}
-
+        return projectService.addProject(projectRequest);
     }
 }
