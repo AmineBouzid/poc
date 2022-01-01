@@ -36,20 +36,20 @@ public class TimeController {
 
 
 
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping(path = "/all", produces ="application/json")
     public List<Time> findAllTimes() {
 
         return this.timeService.findAllTimes();
     }
 
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @DeleteMapping(path ="/time/{id}")
     public ResponseEntity<?> deleteTime(@PathVariable Long id){
         return this.timeService.deleteTime(id);
     }
 
-
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN') or hasRole('USER')")
     @GetMapping(path=   "/usertime/{id}", produces ="application/json")
     public Optional<List<Time>>  getUserTimes(@PathVariable Long id) {
         return this.timeService.getUserTimes(id);

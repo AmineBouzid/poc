@@ -127,9 +127,10 @@ public class AuthController {
                             });
                         }
                         User.setRoles(roles);
-
+                        System.out.print(updateRequest.getManager());
                         if (userRepository.existsByUsername(updateRequest.getManager())) {
                             Optional<User> manager_object = userRepository.findByUsername(updateRequest.getManager());
+                            System.out.print(manager_object.get().getUsername());
                             if(manager_object.isPresent()){
                                 User.setManager(manager_object.get());
                             }else{
@@ -139,7 +140,9 @@ public class AuthController {
                             manager_response.set("Warning : Manager wasn't updated");
                         }
                         User.setUsername(updateRequest.getUsername());
-                        User.setPassword(encoder.encode(updateRequest.getPassword()));
+                        if(!updateRequest.getPassword().isBlank()) {
+                            User.setPassword(encoder.encode(updateRequest.getPassword()));
+                        }
                         return userRepository.save(User);
 
                     });

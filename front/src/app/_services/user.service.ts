@@ -82,4 +82,8 @@ export class UserService {
       date_saisie, nb_hours, user_id, project_id,
     }, httpOptions);
   }
+
+  deleteUser(user_id: number): Observable<any> {
+    return this.http.delete(API_URL_USERS + 'delete/' + user_id, { responseType: 'json' });
+  }
 }

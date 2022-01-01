@@ -1,5 +1,5 @@
 <mat-card *ngIf="!authorized">Error: Unauthorized </mat-card>
-<mat-card *ngIf="authorized && !isSuccessful">
+<mat-card *ngIf="authorized && !isSuccessful && !isDeleted">
     <mat-card-content>
         <form name="form_users" (ngSubmit)="onChosenUser()" #f="ngForm" novalidate>
             <div style="display: flex; flex-direction: column; margin:50px; max-width:400px;">
@@ -17,11 +17,11 @@
         </form>
     </mat-card-content>
 </mat-card>
-<mat-card *ngIf="authorized">
+<mat-card *ngIf="authorized && isChosen">
     <mat-card-content>
         <div class="example-container">
             <div class="form-container">
-                <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+                <form *ngIf="!isSuccessful && !isDeleted" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
                     <div style="display: flex; flex-direction: column; margin:50px; max-width:400px;">
                         <h1>Account inforamtion</h1>
                         <mat-form-field class="form-field" appearance="outline">
@@ -68,18 +68,19 @@
                                 <span *ngIf="email.errors?.['email']">Email must be a valid email address</span>
                             </mat-error>
                         </mat-form-field>
+                        <mat-hint>If you do not wish to change the password leave it blank</mat-hint>
                         <mat-form-field class="form-field" appearance="outline">
                             <mat-label for="password"> Password
                             </mat-label>
                             <input matInput type="password" class="form-control" name="password"
-                                [(ngModel)]="form.password" required minlength="6" #password="ngModel">
+                                [(ngModel)]="form.password" minlength="6" #password="ngModel">
                             <mat-error *ngIf="password.errors && f.submitted">
-                                <span *ngIf="password.errors?.['required']">Password is required</span>
                                 <span *ngIf="password.errors?.['minlength']">
                                     Password must be at least 6 characters</span>
                             </mat-error>
                         </mat-form-field>
-                        <mat-form-field appearance="fill" *ngIf="usedByAdmin">
+                        <!-- <mat-form-field appearance="fill" *ngIf="usedByAdmin"> -->
+                            <mat-form-field appearance="fill">
                             <mat-label>Managers</mat-label>
                             <mat-select [(ngModel)]="form.manager" #manager="ngModel" name="manager">
                                 <mat-option [value]="null">No Manager</mat-option>
@@ -88,26 +89,46 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-label *ngIf="usedByAdmin">Roles : </mat-label>
-                        <mat-checkbox *ngIf="usedByAdmin" name="managerCheckBox" [(ngModel)]="checkedManager"
+                        <!-- <mat-label *ngIf="usedByAdmin">Roles : </mat-label> -->
+                        <mat-label>Roles : </mat-label>
+                        <!-- <mat-checkbox *ngIf="usedByAdmin" name="managerCheckBox" [(ngModel)]="checkedManager"
                             [checked]="checkedAdmin" [disabled]="checkedAdmin">
                             Manager
                         </mat-checkbox>
                         <mat-checkbox *ngIf="usedByAdmin" name="adminCheckBox" [(ngModel)]="checkedAdmin"
                             [checked]="checkedAdmin">Admin
+                        </mat-checkbox> -->
+                        <mat-checkbox  name="managerCheckBox" [(ngModel)]="checkedManager"
+                            [checked]="checkedAdmin" [disabled]="checkedAdmin">
+                            Manager
+                        </mat-checkbox>
+                        <mat-checkbox name="adminCheckBox" [(ngModel)]="checkedAdmin"
+                            [checked]="checkedAdmin">Admin
                         </mat-checkbox>
                         <br>
+                        
                         <button mat-raised-button color="primary">Update</button>
+                        <br>
+                        <button mat-raised-button color="warn" (click)="onDelete()">Delete</button>
+
+                        <br>
                         <div class="alert alert-warning" *ngIf="f.submitted && isUpdateFailed">
                             Update failed!<br />{{ errorMessage }}
                         </div>
                     </div>
                 </form>
+                
+                <div class="alert alert-warning" *ngIf="isDeletedFailed ">
+                    Delete failed!<br />{{ MessageDelete }}
+                </div>
                 <div class="alert alert-success" *ngIf="isSuccessful">
-                    Your registration is successful!
+                    User updated successfully!
                     <div class="alert alert-warning" *ngIf="managerNotAdded && usedByAdmin">
                         No manager was assigned to this user
                     </div>
+                </div>
+                <div class="alert alert-success" *ngIf="isDeleted">
+                    {{MessageDelete}}
                 </div>
 
             </div>

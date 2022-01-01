@@ -94,11 +94,14 @@ export class RegisterComponent implements OnInit {
     }
 
     for (let item of this.currentUser.roles) {
+      console.log(item)
       if (item == "ROLE_ADMIN") {
         this.usedByAdmin = true;
-      } else {
-        this.form.manager = this.currentUser.username;
-      }
+      } 
+    }
+
+    if(!this.usedByAdmin){
+      this.form.manager = this.currentUser.username;
     }
 
     this.authService.register(username, email, password, this.form.manager, nom, prenom, this.role).subscribe(
