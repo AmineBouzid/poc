@@ -35,7 +35,7 @@ public class UserController {
         return this.userService.findAllManagers();
     }
 
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @GetMapping(path ="/user/{id}", produces ="application/json")
     public User findUserById(@PathVariable Long id){
         return this.userService.findUserById(id);

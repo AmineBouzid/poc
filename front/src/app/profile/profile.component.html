@@ -4,7 +4,7 @@
         <header class="jumbotron">
             <h3>
                 <strong>Username:</strong>
-                {{user.username}}
+                {{user?.username}}
             </h3>
         </header>
         <!-- <p>
@@ -14,19 +14,23 @@
     </p> -->
         <p>
             <strong>Id:</strong>
-            {{ user.id }}
+            {{ user?.id }}
         </p>
         <p>
             <strong>First Name:</strong>
-            {{ user.prenom }}
+            {{ user?.prenom }}
         </p>
         <p>
             <strong>Last Name:</strong>
-            {{ user.nom }}
+            {{ user?.nom }}
         </p>
         <p>
             <strong>Email:</strong>
-            {{ user.email }}
+            {{ user?.email }}
+        </p>
+        <p>
+            <strong>Manager:</strong>
+            {{ user?.manager['username'] }}
         </p>
         <strong>Roles:</strong>
         <ul>

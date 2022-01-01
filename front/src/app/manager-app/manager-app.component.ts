@@ -4,8 +4,19 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
 
 interface Project {
-  nom_projet: String;
-  manager_id: Number;
+  id_project: Number;
+  project_name: String;
+  manager: User;
+}
+interface User {
+  id: Number;
+  username: String;
+  email: String;
+  password: String;
+  roles: [];
+  nom: String;
+  prenom: String;
+  manager: any;
 }
 
 @Component({
@@ -19,12 +30,22 @@ export class ManagerAppComponent implements OnInit {
     manager_id: null
   };
 
+  form_delete: any = {
+    project_id: null,
+  }
+
   authorized = false;
   content?: string;
   errorMessage = '';
   isSuccessful = false;
   isSignUpFailed = false;
   currentUser: any;
+  projects: Project[] = [];
+  isDeleted = false;
+  isDeletedFailed = false
+  MessageDelete: any;
+  id_to_delete: any;
+  
 
   constructor(private token: TokenStorageService, private userService: UserService) { }
 
@@ -39,6 +60,11 @@ export class ManagerAppComponent implements OnInit {
         this.content = JSON.parse(err.error).message;
         this.authorized = false;
       }
+    );
+    this.userService.getAllProjects().subscribe(
+      data => {
+        this.projects = data;
+      },
     );
   }
 
@@ -57,4 +83,22 @@ export class ManagerAppComponent implements OnInit {
       }
     );
   }
+  onDelete(): void{
+    this.userService.deleteProject(this.id_to_delete).subscribe(
+      data => {
+        console.log(data);
+        this.MessageDelete =data.message;
+        this.isDeleted = true;
+        this.isDeletedFailed = false;
+      },
+      err => {
+        this.MessageDelete = err.message;
+        this.isDeletedFailed = true;
+      }
+    )
+    
+  }
+  
 }
+
+

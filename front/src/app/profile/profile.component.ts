@@ -18,7 +18,7 @@ interface User {
 })
 export class ProfileComponent implements OnInit {
   currentUser: any;
-  user!: User;
+  user: any;
   content: any;
   authorized = false;
 
@@ -41,6 +41,7 @@ export class ProfileComponent implements OnInit {
         this.user = data;
       }
     )
+    //console.log(this.user.manager)
   }
 
 }

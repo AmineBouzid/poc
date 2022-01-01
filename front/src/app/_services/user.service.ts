@@ -83,7 +83,13 @@ export class UserService {
     }, httpOptions);
   }
 
+
   deleteUser(user_id: number): Observable<any> {
     return this.http.delete(API_URL_USERS + 'delete/' + user_id, { responseType: 'json' });
   }
+
+  deleteProject(project_id: number): Observable<any> {
+    return this.http.delete(API_URL_PROJECTS + 'delete/' + project_id, { responseType: 'json' });
+  }
+
 }

@@ -43,7 +43,7 @@ public class TimeController {
         return this.timeService.findAllTimes();
     }
 
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @DeleteMapping(path ="/time/{id}")
     public ResponseEntity<?> deleteTime(@PathVariable Long id){
         return this.timeService.deleteTime(id);

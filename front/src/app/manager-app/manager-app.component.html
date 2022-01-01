@@ -14,9 +14,7 @@
                         <span *ngIf="nom_projet.errors?.['minlength']">Project name must be at least 5 characters</span>
                     </mat-error>
                 </mat-form-field>
-
-                <br>
-                <button mat-raised-button color="primary">Ajouter Projet</button>
+                <button mat-raised-button color="primary">Add Project</button>
                 <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
                     Project adding failed!<br />{{ errorMessage }}
                 </div>
@@ -25,5 +23,21 @@
         <div class="alert alert-success" *ngIf="isSuccessful">
             Project has been added !
         </div>
+    </div>
+</mat-card>
+<mat-card>
+    <form *ngIf="!isDeleted" name="form_delete" (ngSubmit)="f.form.valid && onDelete()" #f="ngForm" novalidate>
+    <mat-form-field appearance="fill">
+        <mat-label>Projects</mat-label>
+        <mat-select [(ngModel)]="id_to_delete" #project="ngModel" name="project">
+            <mat-option *ngFor="let item of projects" [value]="item.id_project">
+                {{item.project_name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button (click)=onDelete() color="warn">Delete Project</button>
+    </form>
+    <div class="alert alert-success" *ngIf="isDeleted">
+        {{MessageDelete}}
     </div>
 </mat-card>

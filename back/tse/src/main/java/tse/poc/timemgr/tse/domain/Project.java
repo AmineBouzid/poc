@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(	name = "projects")
 public class Project {
 
     public Long getId_project() {
@@ -16,7 +17,7 @@ public class Project {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_project;
 
     private String project_name;

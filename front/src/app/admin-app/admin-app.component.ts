@@ -73,7 +73,7 @@ export class AdminAppComponent implements OnInit {
       if (item == "ROLE_ADMIN") {
         this.usedByAdmin = true;
       }
-    }
+  }
     this.userService.getAllUsers().subscribe(
       data => {
         this.users = data;
