@@ -17,7 +17,7 @@ import { TimeComponent } from './time/time.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-
+import { MatTableModule } from '@angular/material/table';
 import { UserAppComponent } from './user-app/user-app.component';
 import { ManagerAppComponent } from './manager-app/manager-app.component';
 import { AdminAppComponent } from './admin-app/admin-app.component';
@@ -30,7 +30,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule, NgxMatDateFormats, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
-
+import { MatNativeDateModule } from '@angular/material/core';
 
 const INTL_DATE_INPUT_FORMAT = {
   year: 'numeric',
@@ -65,6 +65,8 @@ const MAT_DATE_FORMATS: NgxMatDateFormats = {
     HomeComponent
   ],
   imports: [
+    MatNativeDateModule,
+    MatTableModule,
     NgxMatNativeDateModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,

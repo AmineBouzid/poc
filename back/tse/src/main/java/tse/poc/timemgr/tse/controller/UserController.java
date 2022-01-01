@@ -20,32 +20,25 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
 
     @GetMapping(path = "/all", produces ="application/json")
     public Collection<User> findAllUser() {
-        return userService.findAllUser();
+        return this.userService.findAllUser();
     }
 
     @GetMapping(path = "/managers", produces ="application/json")
-    public Collection<User> findallManagers() {
-        Optional<Role> role = roleRepository.findByName(ERole.ROLE_MANAGER);
-        return userRepository.findByRoles(role);
+    public Collection<User> findAllManagers() {
+        return this.userService.findAllManagers();
     }
 
     @GetMapping(path ="/user/{id}", produces ="application/json")
-    public Optional<User> findUserById(@PathVariable Long id){
-        return this.userRepository.findById(id);
+    public User findUserById(@PathVariable Long id){
+        return this.userService.findUserById(id);
     }
 
 
     @DeleteMapping(path ="/user/{id}")
     public void deleteUser(@PathVariable Long id){
-
         User userToDelete = this.userService.findUserById(id);
         this.userService.deleteUser(userToDelete);
     }

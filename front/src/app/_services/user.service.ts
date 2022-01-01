@@ -62,6 +62,11 @@ export class UserService {
     return this.http.get(API_URL_PROJECTS + 'all', { responseType: 'json' });
   }
 
+  getUserTimes(id: number): Observable<any> {
+    let params = new HttpParams().set('id', id);
+    return this.http.get(API_URL_TIME + 'usertime/' + id, { responseType: 'json' });
+  }
+
 
 
 

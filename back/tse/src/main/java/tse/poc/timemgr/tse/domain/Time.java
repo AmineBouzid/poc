@@ -14,6 +14,14 @@ public class Time {
 
     private Date date_saisie;
 
+    public Date getDate_travail() {
+        return date_travail;
+    }
+
+    public void setDate_travail(Date date_travail) {
+        this.date_travail = date_travail;
+    }
+
     private Date date_travail;
 
     private String nb_hours;

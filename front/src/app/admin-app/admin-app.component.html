@@ -82,7 +82,7 @@
                         <mat-form-field appearance="fill" *ngIf="usedByAdmin">
                             <mat-label>Managers</mat-label>
                             <mat-select [(ngModel)]="form.manager" #manager="ngModel" name="manager">
-                                <mat-option selected [value]="null">No Manager</mat-option>
+                                <mat-option [value]="null">No Manager</mat-option>
                                 <mat-option *ngFor="let item of managers" [value]="item.username">
                                     {{item.username}}
                                 </mat-option>

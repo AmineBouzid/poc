@@ -3,7 +3,6 @@ package tse.poc.timemgr.tse.service;
 import tse.poc.timemgr.tse.domain.User;
 
 import java.util.Collection;
-import java.util.Optional;
 
 public interface UserService {
 
@@ -11,11 +10,9 @@ public interface UserService {
 
      User findUserById(Long id);
 
-     void addUser(User user);
+     Collection<User> findAllManagers();
 
      void deleteUser(User user);
-
-
 
 
 }
