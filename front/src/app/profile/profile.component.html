@@ -6,36 +6,37 @@
                 <div style="display: flex; flex-direction: column; margin:50px; max-width:400px;">
                     <h1>Account information</h1>
                     <mat-card>
-                        <mat-card-content for="id">
-                            <mat-icon> contact_mail</mat-icon>
+                        <mat-card-content class="info" for="id">
+                            <mat-icon>contact_mail</mat-icon>
                             <strong> ID : </strong>{{ user?.id }}
                         </mat-card-content>
-                        <mat-card-content for="username">
+                        <mat-card-content class="info" for="username">
                             <mat-icon>perm_identity</mat-icon>
                             <strong> Username : </strong>{{ user?.username }}
                         </mat-card-content>
-                        <mat-card-content for="nom">
+                        <mat-card-content class="info" for="nom">
                             <mat-icon>looks_one</mat-icon>
                             <strong> Last Name :</strong> {{ user?.nom }}
                         </mat-card-content>
-                        <mat-card-content for="prenom">
+                        <mat-card-content class="info" for="prenom">
                             <mat-icon>looks_two</mat-icon>
                             <strong> First Name : </strong>{{ user?.prenom }}
                         </mat-card-content>
-                        <mat-card-content for="email">
+                        <mat-card-content class="info" for="email">
                             <mat-icon>alternate_email</mat-icon>
                             <strong> Email : </strong>{{ user?.email }}
                         </mat-card-content>
-                        <mat-card-content for="manager">
+                        <mat-card-content class="info" for="manager">
                             <mat-icon>supervisor_account</mat-icon>
                             <strong> Manager : </strong>{{ user?.manager['username']}}
                         </mat-card-content>
-                        <mat-card-content for="roles">
+                        <mat-card-content class="info" for="roles">
                             <mat-icon>folder_shared</mat-icon>
                             <strong> Roles :</strong>
-                            <div style="display: flex; margin-left:40px">
+                            <div style="display: block; margin-left:40px">
                                 <li *ngFor="let role of currentUser.roles">
                                     {{ role }}
+                                    <br />
                                 </li>
                             </div>
                         </mat-card-content>
