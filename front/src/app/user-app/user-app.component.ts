@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../_services/user.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
@@ -42,15 +42,15 @@ interface Time {
 })
 export class UserAppComponent implements OnInit {
   form1 = new FormGroup({
-    fromDate: new FormControl(null, { validators: [Validators.required]}),
-    toDate: new FormControl(null, { validators: [Validators.required]})
+    fromDate: new FormControl(null, { validators: [Validators.required] }),
+    toDate: new FormControl(null, { validators: [Validators.required] })
   });
 
   form_others = new FormGroup({
-    fromDate: new FormControl(null, { validators: [Validators.required]}),
-    toDate: new FormControl(null, { validators: [Validators.required]})
+    fromDate: new FormControl(null, { validators: [Validators.required] }),
+    toDate: new FormControl(null, { validators: [Validators.required] })
   });
-  
+
   form_user: any = {
     username_options: null,
     username_id: null,
@@ -91,11 +91,12 @@ export class UserAppComponent implements OnInit {
   var: Time | undefined;
   minDate!: Date;
   maxDate!: Date;
-  times2: Time[]= [];
+  times2: Time[] = [];
+  hideSuccessMessage = true;
 
 
   public dateControl = new FormControl(null);
- 
+
 
 
 
@@ -103,8 +104,11 @@ export class UserAppComponent implements OnInit {
     this.picker.cancel();
   }
 
-  constructor(private token: TokenStorageService, private authService: AuthService, private userService: UserService) { }
+  constructor(private cd: ChangeDetectorRef, private token: TokenStorageService, private authService: AuthService, private userService: UserService) { }
 
+  refresh() {
+    this.cd.detectChanges();
+  }
 
   ngOnInit(): void {
 
@@ -182,12 +186,25 @@ export class UserAppComponent implements OnInit {
         console.log(data);
         this.isSuccessful = true;
         this.isSignUpFailed = false;
+        this.refresh();
+        setTimeout(() => {
+          this.hideSuccessMessage = false;
+        }, 3000);
+        this.userService.getUserTimes(this.currentUser.id).subscribe(
+          data => {
+            this.times = data;
+            this.displayedColumns = Object.keys(data[0])
+          }
+        )
       },
       err => {
         this.errorMessage = err.error.message;
         this.isSignUpFailed = true;
       }
     );
+
+
+
   }
 
   onChosenUser(): void {
@@ -227,15 +244,15 @@ export class UserAppComponent implements OnInit {
       return
     }
     for (let item in this.times) {
-       this.times[item].date_travail = new Date(this.times[item].date_travail);
-       console.log(this.times[item].date_travail);
+      this.times[item].date_travail = new Date(this.times[item].date_travail);
+      console.log(this.times[item].date_travail);
     }
-    this.times= this.times.filter(e=>
-       (e.date_travail >= this.form1.value.fromDate && e.date_travail <= this.form1.value.toDate));
+    this.times = this.times.filter(e =>
+      (e.date_travail >= this.form1.value.fromDate && e.date_travail <= this.form1.value.toDate));
     //this.dataSource.data = this.dataSource.data.filter(e=>e.date >= this.fromDate && e.date <= this.toDate);
   }
 
-  resetFilter(){
+  resetFilter() {
     this.userService.getUserTimes(this.currentUser.id).subscribe(
       data => {
         this.times = data;
@@ -249,15 +266,15 @@ export class UserAppComponent implements OnInit {
       return
     }
     for (let item in this.times_other) {
-       this.times_other[item].date_travail = new Date(this.times_other[item].date_travail);
-       console.log(this.times_other[item].date_travail);
+      this.times_other[item].date_travail = new Date(this.times_other[item].date_travail);
+      console.log(this.times_other[item].date_travail);
     }
-    this.times_other= this.times_other.filter(e=>
-       (e.date_travail >= this.form_others.value.fromDate && e.date_travail <= this.form_others.value.toDate));
+    this.times_other = this.times_other.filter(e =>
+      (e.date_travail >= this.form_others.value.fromDate && e.date_travail <= this.form_others.value.toDate));
     //this.dataSource.data = this.dataSource.data.filter(e=>e.date >= this.fromDate && e.date <= this.toDate);
   }
 
-  resetFilterOthers(){
+  resetFilterOthers() {
     this.userService.getUserTimes(this.form_user.username_id).subscribe(
       data => {
         this.times_other = data;

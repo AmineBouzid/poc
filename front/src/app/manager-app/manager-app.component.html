@@ -1,7 +1,7 @@
 <mat-card *ngIf="!authorized">Error: Unauthorized </mat-card>
 <mat-card *ngIf="authorized">
     <div class="container">
-        <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
             <div style="display: flex; flex-direction: column; margin:50px; max-width:400px;">
                 <h1>Add a new project</h1>
                 <mat-form-field class="form-field" appearance="outline">
@@ -20,24 +20,27 @@
                 </div>
             </div>
         </form>
-        <div class="alert alert-success" *ngIf="isSuccessful">
+        <div class="alert alert-success" *ngIf="isSuccessful && hideSuccessMessage">
             Project has been added !
         </div>
     </div>
 </mat-card>
 <mat-card>
-    <form *ngIf="!isDeleted" name="form_delete" (ngSubmit)="f.form.valid && onDelete()" #f="ngForm" novalidate>
-    <mat-form-field appearance="fill">
-        <mat-label>Projects</mat-label>
-        <mat-select [(ngModel)]="id_to_delete" #project="ngModel" name="project">
-            <mat-option *ngFor="let item of projects" [value]="item.id_project">
-                {{item.project_name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <button mat-raised-button (click)=onDelete() color="warn">Delete Project</button>
+    <form name="form_delete" (ngSubmit)="f.form.valid && onDelete()" #f="ngForm" novalidate>
+        <mat-form-field appearance="fill">
+            <mat-label>Projects</mat-label>
+            <mat-select [(ngModel)]="id_to_delete" #project="ngModel" name="project">
+                <mat-option *ngFor="let item of projects" [value]="item.id_project">
+                    {{item.project_name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-raised-button (click)=onDelete() color="warn">Delete Project</button>
     </form>
-    <div class="alert alert-success" *ngIf="isDeleted">
+    <div class="alert alert-success" *ngIf="isDeleted && hideSuccessMessage">
+        Project deleted successfuly
+    </div>
+    <div class="alert alert-success" *ngIf="isDeletedFailed && !isDeleted && hideSuccessMessage">
         {{MessageDelete}}
     </div>
 </mat-card>
