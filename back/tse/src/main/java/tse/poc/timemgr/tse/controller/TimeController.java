@@ -44,7 +44,7 @@ public class TimeController {
     }
 
     //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
-    @DeleteMapping(path ="/time/{id}")
+    @DeleteMapping(path ="/delete/{id}")
     public ResponseEntity<?> deleteTime(@PathVariable Long id){
         return this.timeService.deleteTime(id);
     }

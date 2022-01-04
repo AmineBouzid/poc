@@ -85,7 +85,7 @@ export class UserAppComponent implements OnInit {
   authorized = false;
   times: Time[] = [];
   times_other: Time[] = [];
-  displayedColumns!: string[];
+  displayedColumns: any = [];
   users: User[] = [];
   usedByAdminOrManager = false;
   var: Time | undefined;
@@ -95,10 +95,8 @@ export class UserAppComponent implements OnInit {
   hideSuccessMessage = true;
 
 
+
   public dateControl = new FormControl(null);
-
-
-
 
   closePicker() {
     this.picker.cancel();
@@ -116,9 +114,6 @@ export class UserAppComponent implements OnInit {
     this.minDate = new Date(date.getFullYear(), date.getMonth(), 1);
     this.maxDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
-
-
-
     this.currentUser = this.token.getUser();
     for (let item of this.currentUser.roles) {
       if (item == "ROLE_ADMIN" || item == "ROLE_MANAGER") {
@@ -129,7 +124,17 @@ export class UserAppComponent implements OnInit {
     this.userService.getUserTimes(this.currentUser.id).subscribe(
       data => {
         this.times = data;
+
         this.displayedColumns = Object.keys(data[0])
+        this.displayedColumns.unshift("checked");
+        console.log(this.minDate);
+        console.log(this.maxDate);
+        for (let item in this.times) {
+          this.times[item].date_travail = new Date(this.times[item].date_travail);
+          console.log(this.times[item].date_travail);
+        }
+        this.times = this.times.filter(e =>
+          (e.date_travail >= this.minDate && e.date_travail <= this.maxDate));
       }
     )
     this.userService.getUserBoard().subscribe(
@@ -181,6 +186,7 @@ export class UserAppComponent implements OnInit {
       year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit',
       minute: '2-digit'
     })
+
     this.userService.addTime(date_saisie, nb_hours, this.currentUser.id, this.form.id_project).subscribe(
       data => {
         console.log(data);
@@ -190,19 +196,14 @@ export class UserAppComponent implements OnInit {
         setTimeout(() => {
           this.hideSuccessMessage = false;
         }, 3000);
-        this.userService.getUserTimes(this.currentUser.id).subscribe(
-          data => {
-            this.times = data;
-            this.displayedColumns = Object.keys(data[0])
-          }
-        )
+        this.reload();
       },
       err => {
         this.errorMessage = err.error.message;
+        console.log(this.errorMessage);
         this.isSignUpFailed = true;
       }
     );
-
 
 
   }
@@ -212,6 +213,13 @@ export class UserAppComponent implements OnInit {
       data => {
         this.times_other = data;
         this.displayedColumns = Object.keys(data[0])
+        this.displayedColumns.unshift("checked");
+        for (let item in this.times) {
+          this.times[item].date_travail = new Date(this.times[item].date_travail);
+          console.log(this.times[item].date_travail);
+        }
+        this.times = this.times.filter(e =>
+          (e.date_travail >= this.minDate && e.date_travail <= this.maxDate));
       }
     )
   }
@@ -240,47 +248,116 @@ export class UserAppComponent implements OnInit {
 
 
   applyDateFilter() {
-    if (this.form1.invalid) {
-      return
-    }
-    for (let item in this.times) {
-      this.times[item].date_travail = new Date(this.times[item].date_travail);
-      console.log(this.times[item].date_travail);
-    }
-    this.times = this.times.filter(e =>
-      (e.date_travail >= this.form1.value.fromDate && e.date_travail <= this.form1.value.toDate));
-    //this.dataSource.data = this.dataSource.data.filter(e=>e.date >= this.fromDate && e.date <= this.toDate);
-  }
-
-  resetFilter() {
     this.userService.getUserTimes(this.currentUser.id).subscribe(
       data => {
         this.times = data;
         this.displayedColumns = Object.keys(data[0])
+        this.displayedColumns.unshift("checked");
+        for (let item in this.times) {
+          this.times[item].date_travail = new Date(this.times[item].date_travail);
+          console.log(this.times[item].date_travail);
+        }
+        this.times = this.times.filter(e =>
+          (e.date_travail >= this.form1.value.fromDate && e.date_travail <= this.form1.value.toDate));
       }
     )
-  }
-
-  applyDateFilterOthers() {
-    if (this.form_others.invalid) {
+    if (this.form1.invalid) {
       return
     }
-    for (let item in this.times_other) {
-      this.times_other[item].date_travail = new Date(this.times_other[item].date_travail);
-      console.log(this.times_other[item].date_travail);
-    }
-    this.times_other = this.times_other.filter(e =>
-      (e.date_travail >= this.form_others.value.fromDate && e.date_travail <= this.form_others.value.toDate));
+
     //this.dataSource.data = this.dataSource.data.filter(e=>e.date >= this.fromDate && e.date <= this.toDate);
   }
 
-  resetFilterOthers() {
+  resetFilter() {
+    this.reload()
+  }
+
+  applyDateFilterOthers() {
     this.userService.getUserTimes(this.form_user.username_id).subscribe(
       data => {
         this.times_other = data;
         this.displayedColumns = Object.keys(data[0])
+        this.displayedColumns.unshift("checked");
+        for (let item in this.times_other) {
+          this.times_other[item].date_travail = new Date(this.times_other[item].date_travail);
+          console.log(this.times_other[item].date_travail);
+        }
+        this.times_other = this.times_other.filter(e =>
+          (e.date_travail >= this.form_others.value.fromDate && e.date_travail <= this.form_others.value.toDate));
+      }
+    )
+    if (this.form_others.invalid) {
+      return
+    }
+
+    //this.dataSource.data = this.dataSource.data.filter(e=>e.date >= this.fromDate && e.date <= this.toDate);
+  }
+
+  resetFilterOthers() {
+    this.reloadOthers()
+  }
+  deleteTime(element: any) {
+    console.log(element.id_time);
+    this.userService.deleteTime(element.id_time).subscribe(
+      data => {
+        this.reload()
+        console.log(data);
+      },
+      err => {
+        console.log(err);
       }
     )
   }
+
+  deleteTimeOthers(element: any) {
+    console.log(element.id_time);
+    this.userService.deleteTime(element.id_time).subscribe(
+      data => {
+        this.reloadOthers()
+        console.log(data);
+      },
+      err => {
+        console.log(err);
+      }
+    )
+  }
+
+
+
+  reload() {
+    this.userService.getUserTimes(this.currentUser.id).subscribe(
+      data => {
+        this.times = data;
+
+        this.displayedColumns = Object.keys(data[0])
+        this.displayedColumns.unshift("checked");
+        console.log(this.minDate);
+        console.log(this.maxDate);
+        for (let item in this.times) {
+          this.times[item].date_travail = new Date(this.times[item].date_travail);
+          console.log(this.times[item].date_travail);
+        }
+        this.times = this.times.filter(e =>
+          (e.date_travail >= this.minDate && e.date_travail <= this.maxDate));
+      }
+    )
+  }
+
+  reloadOthers() {
+    this.userService.getUserTimes(this.form_user.username_id).subscribe(
+      data => {
+        this.times_other = data;
+        this.displayedColumns = Object.keys(data[0])
+        this.displayedColumns.unshift("checked");
+        for (let item in this.times) {
+          this.times[item].date_travail = new Date(this.times[item].date_travail);
+          console.log(this.times[item].date_travail);
+        }
+        this.times = this.times.filter(e =>
+          (e.date_travail >= this.minDate && e.date_travail <= this.maxDate));
+      }
+    )
+  }
+
 
 }
