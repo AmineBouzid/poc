@@ -3,22 +3,7 @@ import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-interface User {
-  id: Number;
-  username: String;
-  email: String;
-  password: String;
-  roles: [];
-  nom: String;
-  prenom: String;
-  manager: any;
-}
-
-interface Roles {
-  id: number;
-  name: string;
-}
+import {User} from '../interfaces'
 
 @Component({
   selector: 'app-admin-app',
@@ -57,7 +42,12 @@ export class AdminAppComponent implements OnInit {
   usedByAdmin = false;
   content?: string;
   currentUser: any;
-
+  isChosen =false;
+  isDeleted = false;
+  isDeletedFailed = false
+  MessageDelete: any;
+  
+  
 
 
   constructor(private snackBar: MatSnackBar, private token: TokenStorageService, private authService: AuthService, private userService: UserService) { }
@@ -68,9 +58,7 @@ export class AdminAppComponent implements OnInit {
       if (item == "ROLE_ADMIN") {
         this.usedByAdmin = true;
       }
-
-
-    }
+  }
     this.userService.getAllUsers().subscribe(
       data => {
         this.users = data;
@@ -98,10 +86,12 @@ export class AdminAppComponent implements OnInit {
   onChosenUser(): void {
     this.snackBar.open('Be Careful, Password is not loaded', 'Close');
     console.log("you chose:" + this.form_user.username_id)
+    this.isChosen = true;
+    this.isSuccessful = false;
+    this.isDeleted = false;
     this.userService.getUserById(this.form_user.username_id).subscribe(
       data => {
         this.form = data;
-        this.form.manager = this.form.manager['username'];
         //console.log(this.form.manager['username'])
         this.form.password = "";
         for (let item of this.form.roles) {
@@ -115,11 +105,27 @@ export class AdminAppComponent implements OnInit {
             }
           }
         }
+        this.form.manager = this.form.manager['username'];
       }
     )
+    
   }
 
-
+  onDelete(): void{
+    this.userService.deleteUser(this.form_user.username_id).subscribe(
+      data => {
+        console.log(data);
+        this.MessageDelete =data.message;
+        this.isDeleted = true;
+        this.isDeletedFailed = false;
+      },
+      err => {
+        this.MessageDelete = err.message;
+        this.isDeletedFailed = true;
+      }
+    )
+    
+  }
   onSubmit(): void {
 
     this.role.push("user");
@@ -131,20 +137,21 @@ export class AdminAppComponent implements OnInit {
       this.role.push("manager");
     }
 
-    console.log(this.role)
-    const { nom, prenom, username, email, password, manager } = this.form;
+    console.log(this.form.manager)
+    this.form.manager = this.form.manager
+    //const { nom, prenom, username, email, password, manager } = this.form;
 
-    if (manager == null) {
+    if (this.form.manager == null) {
       this.managerNotAdded = true;
     }
 
-    for (let item of this.currentUser.roles) {
-      if (item == "ROLE_ADMIN") {
-        this.usedByAdmin = true;
-      } else {
-        this.form.manager = this.currentUser.username;
-      }
-    }
+    // for (let item of this.currentUser.roles) {
+    //   if (item == "ROLE_ADMIN") {
+    //     this.usedByAdmin = true;
+    //   } else {
+    //     this.form.manager = this.currentUser.username;
+    //   }
+    // }
 
     this.authService.updateUser(this.form_user.username_id, this.form.username, this.form.email, this.form.password, this.form.manager, this.form.nom, this.form.prenom, this.role).subscribe(
       data => {
@@ -157,6 +164,7 @@ export class AdminAppComponent implements OnInit {
         this.isUpdateFailed = true;
       }
     );
+    
   }
-
+  
 }

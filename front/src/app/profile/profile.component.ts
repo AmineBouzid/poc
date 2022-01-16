@@ -1,16 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
-interface User {
-  id: Number;
-  username: String;
-  email: String;
-  password: String;
-  roles: [];
-  nom: String;
-  prenom: String;
-  manager: any;
-}
+import {User} from '../interfaces'
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -18,7 +10,7 @@ interface User {
 })
 export class ProfileComponent implements OnInit {
   currentUser: any;
-  user!: User;
+  user: any;
   content: any;
   authorized = false;
 
@@ -41,6 +33,7 @@ export class ProfileComponent implements OnInit {
         this.user = data;
       }
     )
+    //console.log(this.user.manager)
   }
 
 }

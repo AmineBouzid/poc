@@ -1,12 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
+import {Project} from '../interfaces'
 
-interface Project {
-  nom_projet: String;
-  manager_id: Number;
-}
 
 @Component({
   selector: 'app-manager-app',
@@ -19,15 +16,29 @@ export class ManagerAppComponent implements OnInit {
     manager_id: null
   };
 
+  form_delete: any = {
+    project_id: null,
+  }
+
   authorized = false;
   content?: string;
   errorMessage = '';
   isSuccessful = false;
   isSignUpFailed = false;
   currentUser: any;
+  projects: Project[] = [];
+  isDeleted = false;
+  isDeletedFailed = false
+  MessageDelete: any;
+  id_to_delete: any;
+  hideSuccessMessage = true;
 
-  constructor(private token: TokenStorageService, private userService: UserService) { }
 
+  constructor(private cd: ChangeDetectorRef, private token: TokenStorageService, private userService: UserService) { }
+
+  refresh() {
+    this.cd.detectChanges();
+  }
   ngOnInit(): void {
     this.currentUser = this.token.getUser();
     this.userService.getProjectBoard().subscribe(
@@ -40,6 +51,11 @@ export class ManagerAppComponent implements OnInit {
         this.authorized = false;
       }
     );
+    this.userService.getAllProjects().subscribe(
+      data => {
+        this.projects = data;
+      },
+    );
   }
 
 
@@ -49,12 +65,59 @@ export class ManagerAppComponent implements OnInit {
       data => {
         console.log(data);
         this.isSuccessful = true;
+        setTimeout(() => {
+          this.hideSuccessMessage = false;
+        }, 3000);
         this.isSignUpFailed = false;
+        this.refresh();
+        this.userService.getAllProjects().subscribe(
+          data => {
+            this.projects = data;
+          },
+        );
+
       },
       err => {
         this.errorMessage = err.error.message;
         this.isSignUpFailed = true;
+        setTimeout(() => {
+          this.hideSuccessMessage = true;
+        }, 3000);
       }
     );
   }
+  onDelete(): void {
+    this.userService.deleteProject(this.id_to_delete).subscribe(
+      data => {
+        console.log(data);
+        //this.MessageDelete = data.message;
+        this.isDeleted = true;
+        this.isDeletedFailed = false;
+        setTimeout(() => {
+          this.hideSuccessMessage = false;
+        }, 4000);
+        this.refresh();
+        this.userService.getAllProjects().subscribe(
+          data => {
+            this.projects = data;
+          },
+        );
+      },
+      err => {
+        setTimeout(() => {
+          this.hideSuccessMessage = false;
+        }, 4000);
+        this.MessageDelete = err.message;
+        this.isDeletedFailed = true;
+      }
+    )
+
+  }
+
+  FadeOutSuccessMsg() {
+
+  }
+
 }
+
+

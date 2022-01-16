@@ -63,7 +63,6 @@ export class UserService {
   }
 
   getUserTimes(id: number): Observable<any> {
-    let params = new HttpParams().set('id', id);
     return this.http.get(API_URL_TIME + 'usertime/' + id, { responseType: 'json' });
   }
 
@@ -82,4 +81,25 @@ export class UserService {
       date_saisie, nb_hours, user_id, project_id,
     }, httpOptions);
   }
+
+  updateCr(id: number, date_cr: string): Observable<any> {
+    return this.http.put(API_URL_USERS + 'cr', {
+      id,
+      date_cr,
+    }, httpOptions);
+  }
+
+
+  deleteUser(user_id: number): Observable<any> {
+    return this.http.delete(API_URL_USERS + 'delete/' + user_id, { responseType: 'json' });
+  }
+
+  deleteProject(project_id: number): Observable<any> {
+    return this.http.delete(API_URL_PROJECTS + 'delete/' + project_id, { responseType: 'json' });
+  }
+
+  deleteTime(time_id: number): Observable<any> {
+    return this.http.delete(API_URL_TIME + 'delete/' + time_id, { responseType: 'json' });
+  }
+
 }

@@ -3,10 +3,9 @@ package tse.poc.timemgr.tse.controller;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -127,9 +126,10 @@ public class AuthController {
                             });
                         }
                         User.setRoles(roles);
-
+                        System.out.print(updateRequest.getManager());
                         if (userRepository.existsByUsername(updateRequest.getManager())) {
                             Optional<User> manager_object = userRepository.findByUsername(updateRequest.getManager());
+                            System.out.print(manager_object.get().getUsername());
                             if(manager_object.isPresent()){
                                 User.setManager(manager_object.get());
                             }else{
@@ -139,9 +139,10 @@ public class AuthController {
                             manager_response.set("Warning : Manager wasn't updated");
                         }
                         User.setUsername(updateRequest.getUsername());
-                        User.setPassword(encoder.encode(updateRequest.getPassword()));
+                        if(!updateRequest.getPassword().isBlank()) {
+                            User.setPassword(encoder.encode(updateRequest.getPassword()));
+                        }
                         return userRepository.save(User);
-
                     });
             return ResponseEntity.ok(new MessageResponse("User Updated successfully!"+manager_response));
         }
@@ -234,6 +235,11 @@ public class AuthController {
         }
 
         user.setRoles(roles);
+        LocalDate now = LocalDate.now();
+        LocalDate last_month = now.minusMonths(1); //When adding user, make latest cr date last month
+        Date date_cr = Date.from(Instant.from(last_month));
+
+        user.setLatest_cr(date_cr);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully! - "+manager_response));

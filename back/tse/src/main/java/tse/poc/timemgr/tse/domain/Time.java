@@ -6,10 +6,11 @@ import java.time.Duration;
 import java.util.Date;
 
 @Entity
+@Table(	name = "times")
 public class Time {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_time;
 
     private Date date_saisie;
@@ -30,6 +31,7 @@ public class Time {
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "proj_id")
     private Project project;
 
     public Time(Date date_saisie, Date date_travail, String nb_hours, User user, Project project) {
