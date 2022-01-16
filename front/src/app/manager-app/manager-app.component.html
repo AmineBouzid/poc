@@ -25,7 +25,7 @@
         </div>
     </div>
 </mat-card>
-<mat-card>
+<mat-card *ngIf="authorized">
     <form name="form_delete" (ngSubmit)="f.form.valid && onDelete()" #f="ngForm" novalidate>
         <mat-form-field appearance="fill">
             <mat-label>Projects</mat-label>
