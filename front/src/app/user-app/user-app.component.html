@@ -23,7 +23,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-raised-button [disabled]="allowed_cr" color="primary">Add time</button>
+                    <button mat-raised-button [disabled]="dont_allow_cr" color="primary">Add time</button>
                     <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed  && hideSuccessMessage">
                         Add time failed!<br />{{ errorMessage }}
                     </div>
@@ -114,7 +114,7 @@
                 </table>
                 <br>
                 <button mat-raised-button style="margin:3px;" (click)="download()" color="primary">Export your times</button>
-                <button mat-raised-button (click)="updateCr()" [disabled]="allowed_cr" color="warn">Submit your times</button>
+                <button mat-raised-button (click)="updateCr()" [disabled]="dont_allow_cr" color="warn">Submit your times</button>
                 <br>
                 
 

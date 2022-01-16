@@ -8,6 +8,7 @@ import autoTable from 'jspdf-autotable'
 import jsPDF from 'jspdf'
 import * as moment from 'moment';
 import {User,Project,Time} from '../interfaces'
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 //declare var jsPDF: any;
 @Component({
@@ -69,7 +70,7 @@ export class UserAppComponent implements OnInit {
   maxDate!: Date;
   times2: Time[] = [];
   hideSuccessMessage = true;
-  allowed_cr = false;
+  dont_allow_cr = false;
 
 
 
@@ -79,37 +80,12 @@ export class UserAppComponent implements OnInit {
     this.picker.cancel();
   }
 
-  constructor(private cd: ChangeDetectorRef, private token: TokenStorageService, private authService: AuthService, private userService: UserService) { }
+  constructor(private snackBar: MatSnackBar, private cd: ChangeDetectorRef, private token: TokenStorageService, private authService: AuthService, private userService: UserService) { }
 
   refresh() {
     this.cd.detectChanges();
   }
-  updateCr() {
-    var today = new Date().toLocaleString();
-    this.userService.updateCr(this.currentUser.id, today).subscribe(
-      data => {
-        console.log(data);
-        this.allowed_cr =true;
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
 
-  unlockCr() {
-    var date = new Date();
-    var today =  new Date(date.getFullYear(),date.getMonth()-1,1)
-    
-    this.userService.updateCr(this.form_user.username_id, today.toLocaleString()).subscribe(
-      data => {
-        console.log(data);
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
  
 
   ngOnInit(): void {
@@ -177,9 +153,9 @@ export class UserAppComponent implements OnInit {
         today = new Date(today.getFullYear(), today.getMonth(), 1);
 
         if(today>latest_cr){
-          this.allowed_cr = false;
+          this.dont_allow_cr = false;
         }else{
-          this.allowed_cr = true;}
+          this.dont_allow_cr = true;}
           }
     )
     
@@ -334,15 +310,25 @@ export class UserAppComponent implements OnInit {
   }
   deleteTime(element: any) {
     console.log(element.id_time);
-    this.userService.deleteTime(element.id_time).subscribe(
-      data => {
-        this.reload()
-        console.log(data);
-      },
-      err => {
-        console.log(err);
-      }
-    )
+    var date_travail = new Date(element.date_travail);
+    date_travail = new Date(date_travail.getFullYear(), date_travail.getMonth(), 1);
+    var today = new Date();
+    today = new Date(today.getFullYear(), today.getMonth(), 1);
+    if(today>date_travail || this.dont_allow_cr){
+      this.snackBar.open('You cannot delete times from submitted months', 'Close');
+    }else{
+      
+      this.userService.deleteTime(element.id_time).subscribe(
+        data => {
+          this.reload()
+          console.log(data);
+        },
+        err => {
+          console.log(err);
+        }
+      )
+    }
+    
   }
 
   deleteTimeOthers(element: any) {
@@ -393,6 +379,33 @@ export class UserAppComponent implements OnInit {
           (e.date_travail >= this.minDate && e.date_travail <= this.maxDate));
       }
     )
+  }
+
+  updateCr() {
+    var today = new Date().toLocaleString();
+    this.userService.updateCr(this.currentUser.id, today).subscribe(
+      data => {
+        console.log(data);
+        this.dont_allow_cr =true;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  unlockCr() {
+    var date = new Date();
+    var today =  new Date(date.getFullYear(),date.getMonth()-1,1)
+    
+    this.userService.updateCr(this.form_user.username_id, today.toLocaleString()).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
 
