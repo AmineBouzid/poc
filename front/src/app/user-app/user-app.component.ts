@@ -161,12 +161,21 @@ export class UserAppComponent implements OnInit {
 
   download(): void {
     const doc = new jsPDF()
-    autoTable(doc, { html: '#myTable' })
+    autoTable(doc, { html: '#myTable', didParseCell: data => { //hide the first column
+      if (data.column.index === 0) {
+        data.cell.styles.cellWidth = 0.1,
+        data.cell.styles.overflow = 'hidden'
+      }
+    } })
     doc.save('test.pdf');
   }
   downloadOthers(): void {
     const doc1 = new jsPDF()
-    autoTable(doc1, { html: '#otherTable' })
+    autoTable(doc1, { html: '#otherTable' ,didParseCell: data => {
+      if (data.column.index === 0) {
+        data.cell.styles.cellWidth = 0.1,
+        data.cell.styles.overflow = 'hidden'
+      }}})
     doc1.save('test_other.pdf');
   }
 
