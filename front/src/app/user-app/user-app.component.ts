@@ -7,32 +7,7 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import autoTable from 'jspdf-autotable'
 import jsPDF from 'jspdf'
 import * as moment from 'moment';
-
-interface User {
-  id: Number;
-  username: String;
-  email: String;
-  password: String;
-  roles: [];
-  nom: String;
-  prenom: String;
-  manager: any;
-}
-
-interface Project {
-  id_project: Number;
-  project_name: String;
-  manager: User;
-}
-
-interface Time {
-  id_time: Number,
-  date_saisie: Date,
-  date_travail: Date,
-  nb_hours: String,
-  user: User,
-  project: Project,
-}
+import {User,Project,Time} from '../interfaces'
 
 //declare var jsPDF: any;
 @Component({

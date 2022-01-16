@@ -3,16 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { UserService } from '../_services/user.service';
 import { TokenStorageService } from '../_services/token-storage.service';
-interface User {
-  id: Number;
-  username: String;
-  email: String;
-  password: String;
-  roles: [];
-  nom: String;
-  prenom: String;
-  manager: any;
-}
+import {User} from '../interfaces'
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',

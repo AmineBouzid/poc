@@ -1,16 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
-interface User {
-  id: Number;
-  username: String;
-  email: String;
-  password: String;
-  roles: [];
-  nom: String;
-  prenom: String;
-  manager: any;
-}
+import {User} from '../interfaces'
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',

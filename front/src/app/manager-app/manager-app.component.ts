@@ -2,22 +2,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
+import {Project} from '../interfaces'
 
-interface Project {
-  id_project: Number;
-  project_name: String;
-  manager: User;
-}
-interface User {
-  id: Number;
-  username: String;
-  email: String;
-  password: String;
-  roles: [];
-  nom: String;
-  prenom: String;
-  manager: any;
-}
 
 @Component({
   selector: 'app-manager-app',

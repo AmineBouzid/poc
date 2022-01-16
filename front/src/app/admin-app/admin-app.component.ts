@@ -3,22 +3,7 @@ import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-interface User {
-  id: Number;
-  username: String;
-  email: String;
-  password: String;
-  roles: [];
-  nom: String;
-  prenom: String;
-  manager: any;
-}
-
-interface Roles {
-  id: number;
-  name: string;
-}
+import {User} from '../interfaces'
 
 @Component({
   selector: 'app-admin-app',
