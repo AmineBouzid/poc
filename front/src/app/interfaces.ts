@@ -7,6 +7,7 @@ export interface User {
     nom: String;
     prenom: String;
     manager: any;
+    latest_cr : any;
   }
 
   export  interface Roles {

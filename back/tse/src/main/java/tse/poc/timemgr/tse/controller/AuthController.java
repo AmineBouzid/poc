@@ -3,10 +3,9 @@ package tse.poc.timemgr.tse.controller;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -144,7 +143,6 @@ public class AuthController {
                             User.setPassword(encoder.encode(updateRequest.getPassword()));
                         }
                         return userRepository.save(User);
-
                     });
             return ResponseEntity.ok(new MessageResponse("User Updated successfully!"+manager_response));
         }
@@ -237,6 +235,11 @@ public class AuthController {
         }
 
         user.setRoles(roles);
+        LocalDate now = LocalDate.now();
+        LocalDate last_month = now.minusMonths(1); //When adding user, make latest cr date last month
+        Date date_cr = Date.from(Instant.from(last_month));
+
+        user.setLatest_cr(date_cr);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully! - "+manager_response));

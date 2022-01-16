@@ -57,6 +57,7 @@ export class UserAppComponent implements OnInit {
   isSuccessful = false;
   isSignUpFailed = false;
   currentUser: any;
+  currentUser1!: User;
   authorized = false;
   times: Time[] = [];
   times_other: Time[] = [];
@@ -68,6 +69,7 @@ export class UserAppComponent implements OnInit {
   maxDate!: Date;
   times2: Time[] = [];
   hideSuccessMessage = true;
+  allowed_cr = false;
 
 
 
@@ -82,6 +84,33 @@ export class UserAppComponent implements OnInit {
   refresh() {
     this.cd.detectChanges();
   }
+  updateCr() {
+    var today = new Date().toLocaleString();
+    this.userService.updateCr(this.currentUser.id, today).subscribe(
+      data => {
+        console.log(data);
+        this.allowed_cr =true;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  unlockCr() {
+    var date = new Date();
+    var today =  new Date(date.getFullYear(),date.getMonth()-1,1)
+    
+    this.userService.updateCr(this.form_user.username_id, today.toLocaleString()).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+ 
 
   ngOnInit(): void {
 
@@ -90,6 +119,10 @@ export class UserAppComponent implements OnInit {
     this.maxDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
     this.currentUser = this.token.getUser();
+
+    
+    
+    
     for (let item of this.currentUser.roles) {
       if (item == "ROLE_ADMIN" || item == "ROLE_MANAGER") {
         this.usedByAdminOrManager = true;
@@ -102,11 +135,11 @@ export class UserAppComponent implements OnInit {
 
         this.displayedColumns = Object.keys(data[0])
         this.displayedColumns.unshift("checked");
-        console.log(this.minDate);
-        console.log(this.maxDate);
+        //console.log(this.minDate);
+        //console.log(this.maxDate);
         for (let item in this.times) {
           this.times[item].date_travail = new Date(this.times[item].date_travail);
-          console.log(this.times[item].date_travail);
+          //console.log(this.times[item].date_travail);
         }
         this.times = this.times.filter(e =>
           (e.date_travail >= this.minDate && e.date_travail <= this.maxDate));
@@ -132,6 +165,25 @@ export class UserAppComponent implements OnInit {
         this.users = data;
       },
     )
+
+    console.log(this.currentUser.id);
+    this.userService.getUserById(this.currentUser.id).subscribe(
+      data => {
+        this.currentUser = data; 
+        
+        var latest_cr = new Date(this.currentUser.latest_cr);
+        latest_cr = new Date(latest_cr.getFullYear(), latest_cr.getMonth(), 1);
+        var today = new Date();
+        today = new Date(today.getFullYear(), today.getMonth(), 1);
+
+        if(today>latest_cr){
+          this.allowed_cr = false;
+        }else{
+          this.allowed_cr = true;}
+          }
+    )
+    
+
   }
 
   download(): void {

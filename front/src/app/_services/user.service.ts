@@ -82,6 +82,13 @@ export class UserService {
     }, httpOptions);
   }
 
+  updateCr(id: number, date_cr: string): Observable<any> {
+    return this.http.put(API_URL_USERS + 'cr', {
+      id,
+      date_cr,
+    }, httpOptions);
+  }
+
 
   deleteUser(user_id: number): Observable<any> {
     return this.http.delete(API_URL_USERS + 'delete/' + user_id, { responseType: 'json' });

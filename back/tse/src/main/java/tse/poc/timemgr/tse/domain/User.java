@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,16 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
+
+    private Date latest_cr;
+
+    public Date getLatest_cr() {
+        return latest_cr;
+    }
+
+    public void setLatest_cr(Date latest_cr) {
+        this.latest_cr = latest_cr;
+    }
 
     @ManyToMany
     @JoinTable(	name = "user_roles",

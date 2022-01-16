@@ -23,7 +23,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-raised-button color="primary">Add time</button>
+                    <button mat-raised-button [disabled]="allowed_cr" color="primary">Add time</button>
                     <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed  && hideSuccessMessage">
                         Add time failed!<br />{{ errorMessage }}
                     </div>
@@ -113,7 +113,11 @@
                     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
                 </table>
                 <br>
-                <button mat-raised-button (click)="download()" color="primary">Export your times</button>
+                <button mat-raised-button style="margin:3px;" (click)="download()" color="primary">Export your times</button>
+                <button mat-raised-button (click)="updateCr()" [disabled]="allowed_cr" color="warn">Submit your times</button>
+                <br>
+                
+
             </mat-card-content>
         </mat-card>
     </div>
@@ -215,7 +219,8 @@
                     <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
                 </table>
                 <br>
-                <button mat-raised-button (click)="downloadOthers()" color="primary">Export the times</button>
+                <button mat-raised-button style="margin:3px;" (click)="downloadOthers()" color="primary">Export the times</button>
+                <button mat-raised-button (click)="unlockCr()" color="warn">Unlock Time Adding</button>
             </mat-card-content>
         </mat-card>
     </div>

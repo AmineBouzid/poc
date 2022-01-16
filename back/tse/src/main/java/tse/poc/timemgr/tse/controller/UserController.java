@@ -9,9 +9,12 @@ import tse.poc.timemgr.tse.dao.UserRepository;
 import tse.poc.timemgr.tse.domain.ERole;
 import tse.poc.timemgr.tse.domain.Role;
 import tse.poc.timemgr.tse.domain.User;
+import tse.poc.timemgr.tse.payload.request.CrRequest;
+import tse.poc.timemgr.tse.payload.request.UpdateRequest;
 import tse.poc.timemgr.tse.payload.response.MessageResponse;
 import tse.poc.timemgr.tse.service.UserService;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -45,6 +48,12 @@ public class UserController {
     @DeleteMapping(path ="/delete/{id}")
     public ResponseEntity<MessageResponse> deleteUser(@PathVariable Long id){
         return this.userService.deleteUser(id);
+    }
+
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PutMapping("/cr")
+    public ResponseEntity<?>  updateLatestCr(@Valid @RequestBody CrRequest crRequest) {
+        return this.userService.updateLatestCr(crRequest);
     }
 
 }
