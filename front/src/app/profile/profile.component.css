@@ -1,0 +1,12 @@
+.mat-card{
+    width: 35%;
+    margin : 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+mat-icon{
+    margin:5px;
+    color:#673ab7
+}

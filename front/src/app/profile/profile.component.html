@@ -1,46 +1,42 @@
 <mat-card *ngIf="!authorized">Error: Unauthorized </mat-card>
-<mat-card *ngIf="authorized">
+<div *ngIf="authorized">
     <div class="container" *ngIf="currentUser; else loggedOut">
-        <header class="jumbotron">
-            <h3>
-                <strong>Username:</strong>
-                {{user?.username}}
-            </h3>
-        </header>
-        <!-- <p>
-        <strong>Token:</strong>
-        {{ currentUser.accessToken.substring(0, 20) }} ...
-        {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
-    </p> -->
-        <p>
-            <strong>Id:</strong>
-            {{ user?.id }}
-        </p>
-        <p>
-            <strong>First Name:</strong>
-            {{ user?.prenom }}
-        </p>
-        <p>
-            <strong>Last Name:</strong>
-            {{ user?.nom }}
-        </p>
-        <p>
-            <strong>Email:</strong>
-            {{ user?.email }}
-        </p>
-        <p>
-            <strong>Manager:</strong>
-            {{ user?.manager['username'] }}
-        </p>
-        <strong>Roles:</strong>
-        <ul>
-            <li *ngFor="let role of currentUser.roles">
-                {{ role }}
-            </li>
-        </ul>
+
+        <mat-card>
+            <mat-icon>contact_mail</mat-icon><strong>Id:</strong>&nbsp;&nbsp;{{ user?.id }}
+        </mat-card>
+        <mat-card>
+            <mat-icon>perm_identity</mat-icon><strong>Username:</strong>&nbsp;&nbsp;{{user?.username}}
+        </mat-card>
+        <mat-card>
+            <mat-icon>looks_one</mat-icon><strong>First Name:</strong>&nbsp;&nbsp;{{ user?.prenom }}
+        </mat-card>
+        <mat-card>
+            <mat-icon>looks_two</mat-icon> <strong>Last Name:</strong>
+            &nbsp;&nbsp;{{ user?.nom }}
+        </mat-card>
+        <mat-card>
+            <mat-icon>alternate_email</mat-icon><strong>Email:</strong>
+            &nbsp;&nbsp;{{ user?.email }}
+        </mat-card>
+        <mat-card>
+            <mat-icon>supervisor_account</mat-icon><strong>Manager:</strong>
+            &nbsp;&nbsp;{{ user?.manager['username'] }}
+        </mat-card>
+        <mat-card>
+            <mat-icon>folder_shared</mat-icon><strong>Roles:</strong>
+            <ul>
+                <li *ngFor="let role of currentUser.roles">
+                    {{ role }}
+                </li>
+            </ul>
+        </mat-card>
+
+
+
     </div>
 
     <ng-template #loggedOut>
         Please login.
     </ng-template>
-</mat-card>
+</div>
