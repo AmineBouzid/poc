@@ -49,7 +49,7 @@
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
                     <button style="margin:5px;" class="button-form" mat-raised-button color="accent"
-                        (click)="applyDateFilter()" [disabled]="form1.invalid">Submit</button>
+                        (click)="applyDateFilter()" [disabled]="form1.invalid">Filter</button>
                     <button style="margin:5px;" mat-raised-button color="accent" type="button" (click)="resetFilter()"
                         [disabled]="form1.invalid">Clear</button>
                     <br>
@@ -150,7 +150,7 @@
                         <mat-datepicker #picker22></mat-datepicker>
                     </mat-form-field>
                     <button class="button-form" style="margin:5px;" mat-raised-button color="accent"
-                        (click)="applyDateFilterOthers()" [disabled]="form_others.invalid">Submit</button>
+                        (click)="applyDateFilterOthers()" [disabled]="form_others.invalid">Filter</button>
                     <button style="margin:5px;" mat-raised-button color="accent" type="button"
                         (click)="resetFilterOthers()" [disabled]="form_others.invalid">Clear</button>
                 </form>
