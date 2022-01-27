@@ -13,7 +13,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { TimeComponent } from './time/time.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -55,7 +54,6 @@ const MAT_DATE_FORMATS: NgxMatDateFormats = {
 @NgModule({
   declarations: [
     AppComponent,
-    TimeComponent,
     ProfileComponent,
     LoginComponent,
     RegisterComponent,

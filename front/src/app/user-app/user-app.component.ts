@@ -7,8 +7,9 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import autoTable from 'jspdf-autotable'
 import jsPDF from 'jspdf'
 import * as moment from 'moment';
-import {User,Project,Time} from '../interfaces'
+import { User, Project, Time } from '../interfaces'
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { compileNgModuleDeclarationExpression } from '@angular/compiler/src/render3/r3_module_compiler';
 
 //declare var jsPDF: any;
 @Component({
@@ -64,6 +65,7 @@ export class UserAppComponent implements OnInit {
   times_other: Time[] = [];
   displayedColumns: any = [];
   users: User[] = [];
+  users_temp: User[] = [];
   usedByAdminOrManager = false;
   var: Time | undefined;
   minDate!: Date;
@@ -86,7 +88,7 @@ export class UserAppComponent implements OnInit {
     this.cd.detectChanges();
   }
 
- 
+
 
   ngOnInit(): void {
 
@@ -96,9 +98,9 @@ export class UserAppComponent implements OnInit {
 
     this.currentUser = this.token.getUser();
 
-    
-    
-    
+
+
+
     for (let item of this.currentUser.roles) {
       if (item == "ROLE_ADMIN" || item == "ROLE_MANAGER") {
         this.usedByAdminOrManager = true;
@@ -138,47 +140,68 @@ export class UserAppComponent implements OnInit {
     )
     this.userService.getAllUsers().subscribe(
       data => {
-        this.users = data;
+        this.users_temp = data;
+        var usedbyAdmin = false;
+        for (let item of this.currentUser.roles) {
+          if (item == "ROLE_ADMIN") {
+            usedbyAdmin = true;
+            this.users = this.users_temp;
+          }
+        }
+        //add only users under the current manager
+        if (!usedbyAdmin) {
+          for (var i = 0; i < this.users_temp.length; i++) {
+            if ((this.users_temp[i].manager?.id == this.currentUser.id)) {
+              this.users.push(this.users_temp[i])
+            }
+          }
+        }
       },
     )
 
     console.log(this.currentUser.id);
     this.userService.getUserById(this.currentUser.id).subscribe(
       data => {
-        this.currentUser = data; 
-        
+        this.currentUser = data;
+
         var latest_cr = new Date(this.currentUser.latest_cr);
         latest_cr = new Date(latest_cr.getFullYear(), latest_cr.getMonth(), 1);
         var today = new Date();
         today = new Date(today.getFullYear(), today.getMonth(), 1);
 
-        if(today>latest_cr){
+        if (today > latest_cr) {
           this.dont_allow_cr = false;
-        }else{
-          this.dont_allow_cr = true;}
-          }
+        } else {
+          this.dont_allow_cr = true;
+        }
+      }
     )
-    
+
 
   }
 
   download(): void {
     const doc = new jsPDF()
-    autoTable(doc, { html: '#myTable', didParseCell: data => { //hide the first column
-      if (data.column.index === 0) {
-        data.cell.styles.cellWidth = 0.1,
-        data.cell.styles.overflow = 'hidden'
+    autoTable(doc, {
+      html: '#myTable', didParseCell: data => { //hide the first column
+        if (data.column.index === 0) {
+          data.cell.styles.cellWidth = 0.1,
+            data.cell.styles.overflow = 'hidden'
+        }
       }
-    } })
+    })
     doc.save('test.pdf');
   }
   downloadOthers(): void {
     const doc1 = new jsPDF()
-    autoTable(doc1, { html: '#otherTable' ,didParseCell: data => {
-      if (data.column.index === 0) {
-        data.cell.styles.cellWidth = 0.1,
-        data.cell.styles.overflow = 'hidden'
-      }}})
+    autoTable(doc1, {
+      html: '#otherTable', didParseCell: data => {
+        if (data.column.index === 0) {
+          data.cell.styles.cellWidth = 0.1,
+            data.cell.styles.overflow = 'hidden'
+        }
+      }
+    })
     doc1.save('test_other.pdf');
   }
 
@@ -314,10 +337,10 @@ export class UserAppComponent implements OnInit {
     date_travail = new Date(date_travail.getFullYear(), date_travail.getMonth(), 1);
     var today = new Date();
     today = new Date(today.getFullYear(), today.getMonth(), 1);
-    if(today>date_travail || this.dont_allow_cr){
+    if (today > date_travail || this.dont_allow_cr) {
       this.snackBar.open('You cannot delete times from submitted months', 'Close');
-    }else{
-      
+    } else {
+
       this.userService.deleteTime(element.id_time).subscribe(
         data => {
           this.reload()
@@ -328,7 +351,7 @@ export class UserAppComponent implements OnInit {
         }
       )
     }
-    
+
   }
 
   deleteTimeOthers(element: any) {
@@ -386,7 +409,7 @@ export class UserAppComponent implements OnInit {
     this.userService.updateCr(this.currentUser.id, today).subscribe(
       data => {
         console.log(data);
-        this.dont_allow_cr =true;
+        this.dont_allow_cr = true;
       },
       err => {
         console.log(err);
@@ -396,8 +419,8 @@ export class UserAppComponent implements OnInit {
 
   unlockCr() {
     var date = new Date();
-    var today =  new Date(date.getFullYear(),date.getMonth()-1,1)
-    
+    var today = new Date(date.getFullYear(), date.getMonth() - 1, 1)
+
     this.userService.updateCr(this.form_user.username_id, today.toLocaleString()).subscribe(
       data => {
         console.log(data);
