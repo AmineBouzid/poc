@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -235,9 +236,10 @@ public class AuthController {
         }
 
         user.setRoles(roles);
+        ZoneId defaultZoneId = ZoneId.systemDefault();
         LocalDate now = LocalDate.now();
         LocalDate last_month = now.minusMonths(1); //When adding user, make latest cr date last month
-        Date date_cr = Date.from(Instant.from(last_month));
+        Date date_cr = Date.from(last_month.atStartOfDay(defaultZoneId).toInstant());
 
         user.setLatest_cr(date_cr);
         userRepository.save(user);
