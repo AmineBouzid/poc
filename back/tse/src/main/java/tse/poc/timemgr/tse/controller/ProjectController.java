@@ -31,7 +31,7 @@ public class ProjectController {
         return projectService.findAllProject();
     }
 
-    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     @DeleteMapping(path ="/delete/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id){
         ResponseEntity<?> responseEntity = projectService.deleteProject(id);
