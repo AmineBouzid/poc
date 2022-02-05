@@ -27,7 +27,7 @@ public class Time {
 
     private String nb_hours;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private User user;
 
     @ManyToOne

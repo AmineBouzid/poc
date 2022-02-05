@@ -95,22 +95,27 @@ export class UserAppComponent implements OnInit {
     var date = new Date();
     this.minDate = new Date(date.getFullYear(), date.getMonth(), 1);
     this.maxDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-
     this.currentUser = this.token.getUser();
+    this.userService.getUserById(this.currentUser.id).subscribe(
+      data => {
+        this.currentUser = data;
+      });
+    //
 
 
 
 
     for (let item of this.currentUser.roles) {
+      console.log("2: "+item)
       if (item == "ROLE_ADMIN" || item == "ROLE_MANAGER") {
         this.usedByAdminOrManager = true;
       }
     }
+    console.log(this.usedByAdminOrManager)
 
     this.userService.getUserTimes(this.currentUser.id).subscribe(
       data => {
         this.times = data;
-
         this.displayedColumns = Object.keys(data[0])
         this.displayedColumns.unshift("checked");
         //console.log(this.minDate);
@@ -143,22 +148,25 @@ export class UserAppComponent implements OnInit {
         this.users_temp = data;
         var usedbyAdmin = false;
         for (let item of this.currentUser.roles) {
-          if (item == "ROLE_ADMIN") {
+          console.log(item)
+          if (item.name == "ROLE_ADMIN") {
             usedbyAdmin = true;
             this.users = this.users_temp;
+            console.log("used byadmin")
           }
         }
-        //add only users under the current manager
         if (!usedbyAdmin) {
+          console.log("removing")
           for (var i = 0; i < this.users_temp.length; i++) {
             if ((this.users_temp[i].manager?.id == this.currentUser.id)) {
               this.users.push(this.users_temp[i])
             }
           }
         }
+        //add only users under the current manager
       },
     )
-
+      
     console.log(this.currentUser.id);
     this.userService.getUserById(this.currentUser.id).subscribe(
       data => {

@@ -47,7 +47,7 @@ public class User {
         this.latest_cr = latest_cr;
     }
 
-    @ManyToMany
+    @ManyToMany(cascade= {CascadeType.PERSIST})
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -56,7 +56,7 @@ public class User {
     private String nom;
     private String prenom;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager")
     private User manager;
 

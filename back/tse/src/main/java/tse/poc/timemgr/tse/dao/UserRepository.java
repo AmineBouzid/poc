@@ -6,6 +6,7 @@ import tse.poc.timemgr.tse.domain.Role;
 import tse.poc.timemgr.tse.domain.User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -16,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
+
+    Optional<List<User>> findByManager(User Manager);
 }

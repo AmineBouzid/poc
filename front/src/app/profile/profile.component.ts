@@ -10,7 +10,7 @@ import {User} from '../interfaces'
 })
 export class ProfileComponent implements OnInit {
   currentUser: any;
-  user: any;
+  user!: User;
   content: any;
   authorized = false;
 

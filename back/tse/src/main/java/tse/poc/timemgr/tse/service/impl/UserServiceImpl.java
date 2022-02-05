@@ -5,9 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tse.poc.timemgr.tse.dao.RoleRepository;
+import tse.poc.timemgr.tse.dao.TimeRepository;
 import tse.poc.timemgr.tse.dao.UserRepository;
 import tse.poc.timemgr.tse.domain.ERole;
 import tse.poc.timemgr.tse.domain.Role;
+import tse.poc.timemgr.tse.domain.Time;
 import tse.poc.timemgr.tse.domain.User;
 import tse.poc.timemgr.tse.payload.request.CrRequest;
 import tse.poc.timemgr.tse.payload.response.MessageResponse;
@@ -26,6 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    TimeRepository timeRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -54,6 +59,19 @@ public class UserServiceImpl implements UserService {
                     .badRequest()
                     .body(new MessageResponse("Error: User doesnt exist!"));
         }else{
+            Optional<List<Time>> timesToDelete = this.timeRepository.findByUser(userToDelete.get());
+            if(timesToDelete.isPresent()){
+                for (Time item : timesToDelete.get()){
+                    timeRepository.deleteById(item.getId_time());
+                }
+            }
+            Optional<List<User>> userManagersToModify = this.userRepository.findByManager(userToDelete.get());
+            if(userManagersToModify.isPresent()){
+                for (User item : userManagersToModify.get()){
+                    item.setManager(null);
+                    userRepository.save(item);
+                }
+            }
             userRepository.deleteById(id);
             return ResponseEntity.ok(new MessageResponse("User deleted successfully!"));
         }
