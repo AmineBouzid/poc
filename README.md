@@ -38,7 +38,7 @@ Réalisation d’une application web permettant la saisie, la consultation, l'é
 
 First, you need to install a MySQL server (we suggest  [MySQL Workbench](https://dev.mysql.com/downloads/workbench/))
 
-The first step is to create a database named : poc. 
+The first step is to create a database named : poc
 
 Then import the SQL Script : [Db_structure.sql](https://github.com/AmineBouzid/poc/blob/main/Db_structure.sql "Db_structure.sql") to your created Database and execute it.
 
