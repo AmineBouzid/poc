@@ -82,7 +82,7 @@ Finally on your browser go to :  [http://localhost:4200/](http://localhost:4200/
 
 - [@Amine BOUZID](https://github.com/AmineBouzid) - amine.bouzid@telecom-st-etienne.fr
 
-- @Eva LUVISUTTO - eva.luvisiutto@telecom-st-etienne.fr
+- @Eva LUVISUTTO - eva.luvisutto@telecom-st-etienne.fr
 
 - @Mathieu Semin- mathieu.semin@telecom-st-etienne.fr
 
